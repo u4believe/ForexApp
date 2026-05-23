@@ -9,7 +9,7 @@ const app = express();
 
 app.use(helmet());
 const allowedOrigins = process.env.NODE_ENV === 'production'
-  ? [process.env.FRONTEND_URL].filter(Boolean)
+  ? (process.env.FRONTEND_URL || '').split(',').map(u => u.trim()).filter(Boolean)
   : ['http://localhost:5173', 'http://localhost:3000'];
 
 app.use(cors({ origin: allowedOrigins, credentials: true }));
