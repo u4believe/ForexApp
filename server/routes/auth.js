@@ -6,8 +6,10 @@ const { v4: uuidv4 } = require('uuid');
 const { sendMail } = require('../mailer');
 const db = require('../db');
 
+const siteUrl = () => (process.env.FRONTEND_URL || '').split(',')[0].trim();
+
 async function sendVerificationEmail(email, token) {
-  const link = `${process.env.FRONTEND_URL}/verify-email/${token}`;
+  const link = `${siteUrl()}/verify-email/${token}`;
   await sendMail({
     to: email,
     subject: 'Verify Your PrimePi Capital Account',
@@ -138,7 +140,7 @@ router.post('/forgot-password', async (req, res) => {
     const expires = Date.now() + 60 * 60 * 1000; // 1 hour
     await db.users.update(user.id, { reset_token: token, reset_token_expires: expires });
 
-    const link = `${process.env.FRONTEND_URL}/reset-password/${token}`;
+    const link = `${siteUrl()}/reset-password/${token}`;
     await sendMail({
       to: email.toLowerCase(),
       subject: 'Reset Your PrimePi Capital Password',
