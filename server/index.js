@@ -6,6 +6,7 @@ const rateLimit = require('express-rate-limit');
 const path = require('path');
 
 const app = express();
+app.set('trust proxy', 1); // Railway / reverse-proxy environments
 
 app.use(helmet());
 const allowedOrigins = process.env.NODE_ENV === 'production'
