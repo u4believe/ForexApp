@@ -35,9 +35,11 @@ export default function Dashboard() {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 
-  useEffect(() => {
+  const fetchTransactions = () => {
     api.get('/user/transactions').then(r => setTransactions(r.data)).catch(() => {});
-  }, []);
+  };
+
+  useEffect(() => { fetchTransactions(); }, []);
 
   const toggleTheme = () => {
     const next = theme === 'light' ? 'dark' : 'light';
@@ -171,7 +173,7 @@ export default function Dashboard() {
             <Route index element={<Overview user={user} transactions={transactions} />} />
             <Route path="deposit" element={<Deposit />} />
             <Route path="withdraw" element={<Withdraw user={user} />} />
-            <Route path="investments" element={<Investments transactions={transactions} />} />
+            <Route path="investments" element={<Investments transactions={transactions} refreshTransactions={fetchTransactions} />} />
             <Route path="profile" element={<Profile />} />
           </Routes>
         </main>

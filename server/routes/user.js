@@ -6,6 +6,7 @@ const { sendMail } = require('../mailer');
 const auth = require('../middleware/auth');
 const db = require('../db');
 const { supabase } = require('../db');
+const PLANS = require('../plans');
 
 const KYC_BUCKET = 'kyc-documents';
 
@@ -216,6 +217,45 @@ router.get('/transactions', auth, async (req, res) => {
   } catch (err) {
     console.error('Transactions error:', err);
     res.status(500).json({ error: 'Failed to load transactions' });
+  }
+});
+
+// Select or switch investment plan
+router.post('/investments/select', auth, async (req, res) => {
+  try {
+    const { plan_name } = req.body;
+    const plan = PLANS.find(p => p.name === plan_name);
+    if (!plan) return res.status(400).json({ error: 'Invalid plan selected' });
+
+    const balance = req.user.balance || 0;
+    if (balance < plan.min) {
+      return res.status(400).json({
+        error: `You need a minimum balance of $${plan.min.toLocaleString()} to qualify for the ${plan.name} plan. Your current balance is $${balance.toLocaleString('en-US', { minimumFractionDigits: 2 })}.`,
+      });
+    }
+
+    // Cancel any existing active or pending investments
+    const existing = await db.investments.findByUser(req.user.id);
+    await Promise.all(
+      existing
+        .filter(i => ['active', 'pending'].includes(i.status))
+        .map(i => db.investments.update(i.id, { status: 'cancelled' }))
+    );
+
+    const investment = await db.investments.create({
+      user_id: req.user.id,
+      plan_name: plan.name,
+      amount: balance,
+      roi_min: plan.roi_min,
+      roi_max: plan.roi_max,
+      profit_fee: plan.profit_fee,
+      status: 'pending',
+    });
+
+    res.json({ message: `${plan.name} plan selected. Awaiting admin approval.`, investment });
+  } catch (err) {
+    console.error('Plan selection error:', err);
+    res.status(500).json({ error: 'Failed to select plan' });
   }
 });
 

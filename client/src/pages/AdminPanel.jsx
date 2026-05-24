@@ -15,6 +15,11 @@ export default function AdminPanel() {
   const [balanceEdit, setBalanceEdit] = useState({ userId: null, value: '' });
   const [kycUrl, setKycUrl] = useState(null);
   const [kycLoading, setKycLoading] = useState(false);
+  const [investments, setInvestments] = useState([]);
+  const [invLoading, setInvLoading] = useState(false);
+  const [assignPlan, setAssignPlan] = useState('');
+
+  const PLANS = ['Starter', 'Growth', 'Premium', 'Elite'];
 
   const fetchData = async () => {
     setLoading(true);
@@ -29,7 +34,17 @@ export default function AdminPanel() {
     setLoading(false);
   };
 
+  const fetchInvestments = async () => {
+    setInvLoading(true);
+    try {
+      const res = await api.get('/admin/investments/pending');
+      setInvestments(res.data);
+    } catch { }
+    setInvLoading(false);
+  };
+
   useEffect(() => { fetchData(); }, []);
+  useEffect(() => { if (tab === 'investments') fetchInvestments(); }, [tab]);
 
   const updateStatus = async (userId, status) => {
     try {
@@ -98,6 +113,7 @@ export default function AdminPanel() {
 
         {[
           { key: 'users', label: '👥 Users' },
+          { key: 'investments', label: '📈 Investments' },
           { key: 'stats', label: '📊 Statistics' },
         ].map(t => (
           <button
@@ -137,6 +153,77 @@ export default function AdminPanel() {
         {msg && (
           <div className="alert alert-success" style={{ marginBottom: '20px', position: 'fixed', top: '20px', right: '20px', zIndex: 999, maxWidth: '300px' }}>
             ✓ {msg}
+          </div>
+        )}
+
+        {tab === 'investments' && (
+          <div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+              <h2 style={{ fontFamily: "'Playfair Display', serif" }}>Pending Investment Requests</h2>
+              <button className="btn btn-ghost btn-sm" onClick={fetchInvestments}>↻ Refresh</button>
+            </div>
+            {invLoading ? (
+              <div style={{ textAlign: 'center', padding: '48px' }}><span className="spinner" style={{ width: '32px', height: '32px' }} /></div>
+            ) : investments.length === 0 ? (
+              <div className="card" style={{ textAlign: 'center', padding: '48px', color: 'var(--text-faint)' }}>
+                <div style={{ fontSize: '2.5rem', marginBottom: '12px' }}>📋</div>
+                <p>No pending investment requests.</p>
+              </div>
+            ) : (
+              <div className="table-wrap">
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>User</th>
+                      <th>Email</th>
+                      <th>Plan</th>
+                      <th>Amount</th>
+                      <th>ROI</th>
+                      <th>Fee</th>
+                      <th>Requested</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {investments.map(inv => (
+                      <tr key={inv.id}>
+                        <td style={{ fontWeight: 600 }}>{inv.user_name}</td>
+                        <td style={{ fontSize: '0.83rem' }}>{inv.user_email}</td>
+                        <td><span style={{ fontWeight: 600, color: 'var(--gold-600)' }}>{inv.plan_name}</span></td>
+                        <td>${parseFloat(inv.amount).toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                        <td>{inv.roi_min}%–{inv.roi_max}%</td>
+                        <td>{inv.profit_fee}%</td>
+                        <td style={{ fontSize: '0.8rem', color: 'var(--text-faint)' }}>{formatDate(inv.created_at)}</td>
+                        <td>
+                          <div style={{ display: 'flex', gap: '6px' }}>
+                            <button
+                              className="btn btn-sm"
+                              style={{ background: 'var(--success-bg)', color: 'var(--success)', border: '1px solid var(--success-border)', fontSize: '0.75rem' }}
+                              onClick={async () => {
+                                await api.put(`/admin/investments/${inv.id}/approve`);
+                                setMsg(`${inv.plan_name} plan approved for ${inv.user_email}`);
+                                fetchInvestments();
+                                setTimeout(() => setMsg(''), 4000);
+                              }}
+                            >✓ Approve</button>
+                            <button
+                              className="btn btn-sm"
+                              style={{ background: 'var(--danger-bg)', color: 'var(--danger)', border: '1px solid var(--danger-border)', fontSize: '0.75rem' }}
+                              onClick={async () => {
+                                await api.put(`/admin/investments/${inv.id}/reject`);
+                                setMsg(`Investment rejected for ${inv.user_email}`);
+                                fetchInvestments();
+                                setTimeout(() => setMsg(''), 4000);
+                              }}
+                            >✗ Reject</button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         )}
 
@@ -285,6 +372,40 @@ export default function AdminPanel() {
                         Set Balance
                       </button>
                     </div>
+                  </div>
+                </div>
+
+                {/* Assign Plan */}
+                <div style={{ marginBottom: '20px' }}>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-faint)', marginBottom: '10px' }}>Assign Investment Plan</div>
+                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+                    <select
+                      className="form-input"
+                      style={{ maxWidth: '180px' }}
+                      value={assignPlan}
+                      onChange={e => setAssignPlan(e.target.value)}
+                    >
+                      <option value="">— Select plan —</option>
+                      {PLANS.map(p => <option key={p} value={p}>{p}</option>)}
+                    </select>
+                    <button
+                      className="btn btn-gold btn-sm"
+                      disabled={!assignPlan}
+                      onClick={async () => {
+                        if (!assignPlan) return;
+                        try {
+                          const res = await api.post(`/admin/users/${selectedUser.user.id}/assign-plan`, { plan_name: assignPlan });
+                          setMsg(res.data.message);
+                          setAssignPlan('');
+                          setTimeout(() => setMsg(''), 4000);
+                        } catch (err) {
+                          setMsg(err.response?.data?.error || 'Failed to assign plan');
+                          setTimeout(() => setMsg(''), 4000);
+                        }
+                      }}
+                    >
+                      Assign Plan
+                    </button>
                   </div>
                 </div>
 

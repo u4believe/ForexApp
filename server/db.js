@@ -182,6 +182,24 @@ const db = {
       return data || [];
     },
 
+    async findById(id) {
+      const { data } = await supabase.from('investments').select('*').eq('id', parseInt(id)).single();
+      return data || null;
+    },
+
+    async findAll(filter = {}) {
+      let query = supabase.from('investments').select('*').order('created_at', { ascending: false });
+      query = applyFilter(query, filter);
+      const { data, error } = await query;
+      if (error) throw error;
+      return data || [];
+    },
+
+    async update(id, updates) {
+      const { data } = await supabase.from('investments').update(updates).eq('id', parseInt(id)).select().single();
+      return data || null;
+    },
+
     async deleteByUser(userId) {
       const { error } = await supabase.from('investments').delete().eq('user_id', parseInt(userId));
       if (error) throw error;
