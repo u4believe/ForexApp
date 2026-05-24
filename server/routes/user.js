@@ -168,6 +168,35 @@ router.post('/withdraw', auth, async (req, res) => {
     if (parseFloat(amount) <= 0) return res.status(400).json({ error: 'Invalid amount' });
 
     await db.withdrawals.create({ user_id: req.user.id, amount: parseFloat(amount), wallet_address: wallet_address.trim(), crypto });
+
+    if (process.env.NOTIFY_EMAIL) {
+      const u = req.user;
+      const senderName = u.full_name || 'Not provided';
+      try {
+        await sendMail({
+          to: process.env.NOTIFY_EMAIL,
+          subject: `Withdrawal Request — ${senderName} (${u.email})`,
+          html: `
+            <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#0B1628;color:#fff;padding:40px;border-radius:12px;">
+              <h1 style="color:#C9A84C;font-size:24px;margin:0 0 6px;">PrimePi Capital</h1>
+              <p style="color:#8899AF;margin:0 0 30px;font-size:0.9rem;">Withdrawal Request Received</p>
+              <table style="width:100%;border-collapse:collapse;">
+                <tr><td style="padding:8px 0;color:#8899AF;font-size:0.88rem;width:40%;">User Name</td><td style="padding:8px 0;color:#D4DCE8;font-size:0.88rem;">${senderName}</td></tr>
+                <tr><td style="padding:8px 0;color:#8899AF;font-size:0.88rem;">Email Address</td><td style="padding:8px 0;color:#D4DCE8;font-size:0.88rem;">${u.email}</td></tr>
+                <tr><td style="padding:8px 0;color:#8899AF;font-size:0.88rem;">Amount</td><td style="padding:8px 0;color:#C9A84C;font-size:1rem;font-weight:700;">$${parseFloat(amount).toLocaleString('en-US', { minimumFractionDigits: 2 })} USD equivalent</td></tr>
+                <tr><td style="padding:8px 0;color:#8899AF;font-size:0.88rem;">Currency</td><td style="padding:8px 0;color:#D4DCE8;font-size:0.88rem;">${crypto}</td></tr>
+                <tr><td style="padding:8px 0;color:#8899AF;font-size:0.88rem;">Wallet Address</td><td style="padding:8px 0;color:#D4DCE8;font-size:0.88rem;word-break:break-all;">${wallet_address.trim()}</td></tr>
+              </table>
+              <hr style="border-color:rgba(201,168,76,0.2);margin:24px 0;" />
+              <p style="color:#506070;font-size:0.78rem;text-align:center;">&copy; 2024 PrimePi Capital — Admin Notification</p>
+            </div>
+          `,
+        });
+      } catch (emailErr) {
+        console.error('Withdrawal notification email failed:', emailErr.message);
+      }
+    }
+
     res.json({ message: 'Withdrawal request submitted. Processing within 24-48 hours.' });
   } catch (err) {
     console.error('Withdrawal error:', err);

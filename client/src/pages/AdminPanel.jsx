@@ -237,14 +237,10 @@ export default function AdminPanel() {
                           <div style={{ fontSize: '0.82rem', color: 'var(--text-faint)' }}>PDF Document</div>
                         </div>
                       )}
-                      <div style={{ padding: '10px 12px', display: 'flex', gap: '8px', borderTop: '1px solid var(--border)' }}>
+                      <div style={{ padding: '10px 12px', borderTop: '1px solid var(--border)' }}>
                         <a href={kycUrl} target="_blank" rel="noopener noreferrer"
-                          className="btn btn-ghost btn-sm" style={{ flex: 1, textAlign: 'center', textDecoration: 'none' }}>
+                          className="btn btn-ghost btn-sm" style={{ width: '100%', textAlign: 'center', textDecoration: 'none' }}>
                           🔍 View Full Size
-                        </a>
-                        <a href={kycUrl} download
-                          className="btn btn-ghost btn-sm" style={{ flex: 1, textAlign: 'center', textDecoration: 'none' }}>
-                          ⬇ Download
                         </a>
                       </div>
                     </div>
