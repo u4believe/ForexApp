@@ -53,8 +53,15 @@ async function ensureAdminExists() {
   const db = require('./db');
   const bcrypt = require('bcryptjs');
   try {
-    const existing = (await db.users.findAll({ email: process.env.ADMIN_EMAIL.toLowerCase(), role: 'admin' }))[0];
-    if (!existing) {
+    // Find by email regardless of current role
+    const existing = (await db.users.findAll({ email: process.env.ADMIN_EMAIL.toLowerCase() }))[0];
+    if (existing) {
+      // Promote to admin if not already
+      if (existing.role !== 'admin') {
+        await db.users.update(existing.id, { role: 'admin', email_verified: 1, verification_status: 'verified' });
+        console.log('Existing user promoted to admin');
+      }
+    } else {
       const hashed = await bcrypt.hash(process.env.ADMIN_PASSWORD, 12);
       await db.users.create({
         email: process.env.ADMIN_EMAIL.toLowerCase(), password: hashed,
