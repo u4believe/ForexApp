@@ -255,7 +255,7 @@ router.post('/investments/select', auth, async (req, res) => {
     res.json({ message: `${plan.name} plan selected. Awaiting admin approval.`, investment });
   } catch (err) {
     console.error('Plan selection error:', err);
-    res.status(500).json({ error: 'Failed to select plan' });
+    res.status(500).json({ error: err.message || 'Failed to select plan' });
   }
 });
 
