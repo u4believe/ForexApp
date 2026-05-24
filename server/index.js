@@ -48,5 +48,27 @@ app.use((err, req, res, _next) => {
   res.status(500).json({ error: 'Internal server error' });
 });
 
+async function ensureAdminExists() {
+  if (!process.env.ADMIN_EMAIL || !process.env.ADMIN_PASSWORD) return;
+  const db = require('./db');
+  const bcrypt = require('bcryptjs');
+  try {
+    const existing = (await db.users.findAll({ email: process.env.ADMIN_EMAIL.toLowerCase(), role: 'admin' }))[0];
+    if (!existing) {
+      const hashed = await bcrypt.hash(process.env.ADMIN_PASSWORD, 12);
+      await db.users.create({
+        email: process.env.ADMIN_EMAIL.toLowerCase(), password: hashed,
+        email_verified: 1, kyc_submitted: 1, verification_status: 'verified', role: 'admin',
+      });
+      console.log('Admin user created');
+    }
+  } catch (err) {
+    console.error('Failed to ensure admin exists:', err.message);
+  }
+}
+
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`PrimePi server running on port ${PORT}`));
+app.listen(PORT, async () => {
+  console.log(`PrimePi server running on port ${PORT}`);
+  await ensureAdminExists();
+});

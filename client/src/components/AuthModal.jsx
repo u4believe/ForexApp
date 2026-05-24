@@ -129,7 +129,7 @@ export default function AuthModal({ mode, onClose, onSwitch }) {
             <p style={{ color: 'var(--text-faint)', fontSize: '0.83rem', textAlign: 'center', marginBottom: 16 }}>
               Check your inbox and spam folder for the verification email.
             </p>
-            <button className="btn btn-outline btn-full" onClick={() => onSwitch('login')}>
+            <button className="btn btn-outline btn-full" onClick={() => { setSuccess(''); onSwitch('login'); }}>
               Continue to Sign In
             </button>
           </div>

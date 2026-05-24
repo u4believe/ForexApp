@@ -6,14 +6,15 @@ import api from '../api';
 export default function VerifyEmail() {
   const { token } = useParams();
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { refreshUser } = useAuth();
   const [status, setStatus] = useState('verifying');
   const [message, setMessage] = useState('');
 
   useEffect(() => {
     api.get(`/auth/verify/${token}`)
-      .then(res => {
-        login(res.data.token, null);
+      .then(async res => {
+        localStorage.setItem('pv_token', res.data.token);
+        await refreshUser();
         setStatus('success');
         setTimeout(() => navigate(res.data.requiresKyc ? '/kyc' : '/dashboard'), 2500);
       })
