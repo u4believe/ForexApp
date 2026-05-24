@@ -32,6 +32,10 @@ export default function Dashboard() {
   const [theme, setTheme] = useState(() => localStorage.getItem('pv_theme') || 'light');
 
   useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
+  useEffect(() => {
     api.get('/user/transactions').then(r => setTransactions(r.data)).catch(() => {});
   }, []);
 

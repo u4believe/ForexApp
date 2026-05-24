@@ -263,8 +263,8 @@
   font-family: 'Playfair Display', serif;
   color: var(--text-primary);
 }
-.dash-stat-value.gold { color: #111; }
-[data-theme="dark"] .dash-stat-value.gold { color: var(--gold-400); }
+.dash-stat-value.gold { color: #111 !important; }
+[data-theme="dark"] .dash-stat-value.gold { color: var(--gold-400) !important; }
 .dash-stat-value.success { color: var(--success); }
 .dash-stat-sub { font-size: 0.72rem; color: var(--text-faint); margin-top: 4px; }
 
