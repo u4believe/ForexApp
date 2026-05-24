@@ -190,4 +190,29 @@ router.get('/transactions', auth, async (req, res) => {
   }
 });
 
+// Delete account — removes all user data and KYC file
+router.delete('/account', auth, async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    // Remove KYC file from Supabase Storage if it was uploaded there
+    if (req.user.id_photo_path && req.user.id_photo_path.includes('/')) {
+      await supabase.storage.from(KYC_BUCKET).remove([req.user.id_photo_path]);
+    }
+
+    // Delete all related records, then the user itself
+    await Promise.all([
+      db.deposits.deleteByUser(userId),
+      db.withdrawals.deleteByUser(userId),
+      db.investments.deleteByUser(userId),
+    ]);
+    await db.users.delete(userId);
+
+    res.json({ message: 'Account deleted' });
+  } catch (err) {
+    console.error('Delete account error:', err);
+    res.status(500).json({ error: 'Failed to delete account' });
+  }
+});
+
 module.exports = router;

@@ -11,6 +11,24 @@ export default function Profile() {
   const [nokError, setNokError] = useState('');
   const [nokSuccess, setNokSuccess] = useState('');
 
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteInput, setDeleteInput] = useState('');
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [deleteError, setDeleteError] = useState('');
+
+  const handleDeleteAccount = async () => {
+    if (deleteInput !== 'DELETE') { setDeleteError('Please type DELETE to confirm'); return; }
+    setDeleteLoading(true); setDeleteError('');
+    try {
+      await api.delete('/user/account');
+      logout();
+      window.location.href = '/';
+    } catch (err) {
+      setDeleteError(err.response?.data?.error || 'Failed to delete account. Please try again.');
+      setDeleteLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (user) {
       setNokForm({
@@ -179,6 +197,69 @@ export default function Profile() {
             ⬡ Sign Out
           </button>
         </div>
+      </div>
+
+      {/* Danger Zone — full width */}
+      <div className="card" style={{ marginTop: '24px', borderColor: 'var(--danger-border, rgba(220,53,69,0.35))' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div>
+            <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.1rem', marginBottom: '4px', color: 'var(--danger, #dc3545)' }}>
+              Danger Zone
+            </h3>
+            <p style={{ fontSize: '0.82rem', color: 'var(--text-faint)', margin: 0 }}>
+              Permanently delete your account and all associated data
+            </p>
+          </div>
+          {!showDeleteConfirm && (
+            <button
+              className="btn"
+              style={{ fontSize: '0.85rem', padding: '8px 16px', background: 'transparent', border: '1px solid var(--danger, #dc3545)', color: 'var(--danger, #dc3545)', borderRadius: 'var(--radius)', cursor: 'pointer' }}
+              onClick={() => { setShowDeleteConfirm(true); setDeleteError(''); }}
+            >
+              Delete Account
+            </button>
+          )}
+        </div>
+
+        {showDeleteConfirm && (
+          <div style={{ marginTop: '20px', padding: '20px', background: 'rgba(220,53,69,0.06)', border: '1px solid var(--danger-border, rgba(220,53,69,0.3))', borderRadius: 'var(--radius)' }}>
+            <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: '1.65', marginBottom: '16px' }}>
+              <strong style={{ color: 'var(--danger, #dc3545)' }}>This action cannot be undone.</strong> Deleting your account will permanently remove your profile, investment history, and all stored data. Type <strong>DELETE</strong> below to confirm.
+            </p>
+            {deleteError && (
+              <div className="alert alert-error" style={{ marginBottom: '14px' }}>
+                ⚠ {deleteError}
+              </div>
+            )}
+            <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+              <input
+                type="text"
+                className="form-input"
+                placeholder='Type DELETE to confirm'
+                value={deleteInput}
+                onChange={(e) => { setDeleteInput(e.target.value); setDeleteError(''); }}
+                style={{ maxWidth: '220px', margin: 0 }}
+                autoComplete="off"
+              />
+              <button
+                className="btn"
+                style={{ background: 'var(--danger, #dc3545)', color: '#fff', border: 'none', padding: '10px 20px', borderRadius: 'var(--radius)', cursor: deleteLoading ? 'not-allowed' : 'pointer', opacity: deleteLoading ? 0.7 : 1 }}
+                onClick={handleDeleteAccount}
+                disabled={deleteLoading}
+              >
+                {deleteLoading ? <><span className="spinner" /> Deleting…</> : 'Delete My Account'}
+              </button>
+              <button
+                type="button"
+                className="btn btn-ghost"
+                style={{ fontSize: '0.85rem' }}
+                onClick={() => { setShowDeleteConfirm(false); setDeleteInput(''); setDeleteError(''); }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Next of Kin — full width */}

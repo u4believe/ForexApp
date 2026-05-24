@@ -77,6 +77,11 @@ const db = {
       if (error) throw error;
       return count || 0;
     },
+
+    async delete(id) {
+      const { error } = await supabase.from('users').delete().eq('id', parseInt(id));
+      if (error) throw error;
+    },
   },
 
   deposits: {
@@ -117,6 +122,11 @@ const db = {
       if (error) throw error;
       return data || [];
     },
+
+    async deleteByUser(userId) {
+      const { error } = await supabase.from('deposits').delete().eq('user_id', parseInt(userId));
+      if (error) throw error;
+    },
   },
 
   withdrawals: {
@@ -152,6 +162,11 @@ const db = {
       if (error) throw error;
       return data || [];
     },
+
+    async deleteByUser(userId) {
+      const { error } = await supabase.from('withdrawals').delete().eq('user_id', parseInt(userId));
+      if (error) throw error;
+    },
   },
 
   investments: {
@@ -165,6 +180,11 @@ const db = {
     async findByUser(userId) {
       const { data } = await supabase.from('investments').select('*').eq('user_id', parseInt(userId)).order('created_at', { ascending: false });
       return data || [];
+    },
+
+    async deleteByUser(userId) {
+      const { error } = await supabase.from('investments').delete().eq('user_id', parseInt(userId));
+      if (error) throw error;
     },
   },
 };
