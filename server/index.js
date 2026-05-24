@@ -32,6 +32,17 @@ const apiLimiter = rateLimit({
   message: { error: 'Too many requests, please slow down.' },
 });
 
+// Strict limiter for routes that send emails — protects Resend daily quota
+const emailLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many requests. Please wait before trying again.' },
+});
+app.use('/api/auth/register', emailLimiter);
+app.use('/api/auth/forgot-password', emailLimiter);
+
 app.use('/api/auth', authLimiter);
 app.use('/api', apiLimiter);
 

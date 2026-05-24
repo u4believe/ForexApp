@@ -8,6 +8,21 @@ const db = require('../db');
 
 const siteUrl = () => (process.env.FRONTEND_URL || '').split(',')[0].trim();
 
+// Per-email cooldown — prevents the same address from triggering multiple sends
+const emailCooldowns = new Map();
+const EMAIL_COOLDOWN_MS = 5 * 60 * 1000; // 5 minutes
+
+function checkEmailCooldown(email) {
+  const last = emailCooldowns.get(email);
+  if (last && Date.now() - last < EMAIL_COOLDOWN_MS) return false;
+  emailCooldowns.set(email, Date.now());
+  if (emailCooldowns.size > 5000) {
+    const cutoff = Date.now() - EMAIL_COOLDOWN_MS;
+    for (const [k, v] of emailCooldowns) { if (v < cutoff) emailCooldowns.delete(k); }
+  }
+  return true;
+}
+
 async function sendVerificationEmail(email, token) {
   const link = `${siteUrl()}/verify-email/${token}`;
   await sendMail({
@@ -48,6 +63,9 @@ router.post('/register', async (req, res) => {
         return res.status(400).json({ error: 'Email already registered' });
       }
       // Unverified — refresh token and resend
+      if (!checkEmailCooldown(email.toLowerCase())) {
+        return res.status(429).json({ error: 'A verification email was recently sent. Please wait 5 minutes before requesting another.' });
+      }
       const token = uuidv4();
       const expires = Date.now() + 24 * 60 * 60 * 1000;
       const hashed = await bcrypt.hash(password, 12);
@@ -61,6 +79,9 @@ router.post('/register', async (req, res) => {
       return res.json({ message: 'A new verification link has been sent to your email. Please check your inbox.' });
     }
 
+    if (!checkEmailCooldown(email.toLowerCase())) {
+      return res.status(429).json({ error: 'Please wait 5 minutes before registering again with this email.' });
+    }
     const hashed = await bcrypt.hash(password, 12);
     const token = uuidv4();
     const expires = Date.now() + 24 * 60 * 60 * 1000;
@@ -134,6 +155,10 @@ router.post('/forgot-password', async (req, res) => {
     // Always return success to prevent email enumeration
     if (!user || !user.email_verified) {
       return res.json({ message: 'If that email is registered, a reset link has been sent.' });
+    }
+
+    if (!checkEmailCooldown(email.toLowerCase())) {
+      return res.status(429).json({ error: 'A reset email was recently sent. Please wait 5 minutes before requesting another.' });
     }
 
     const token = uuidv4();

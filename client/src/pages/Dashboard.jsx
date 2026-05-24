@@ -105,6 +105,20 @@ export default function Dashboard() {
               {item.locked && <span className="sidebar-lock-badge">Verified only</span>}
             </NavLink>
           ))}
+          {user?.role === 'admin' && (
+            <>
+              <div style={{ borderTop: '1px solid var(--border-light)', margin: '8px 12px' }} />
+              <Link
+                to="/admin"
+                className="sidebar-link"
+                style={{ color: 'var(--gold-500)' }}
+                onClick={() => setSidebarOpen(false)}
+              >
+                <span className="sidebar-link-icon">⚙</span>
+                <span>Admin Panel</span>
+              </Link>
+            </>
+          )}
         </nav>
 
         {user?.verification_status === 'pending' && (
@@ -121,16 +135,7 @@ export default function Dashboard() {
           </div>
         )}
 
-        <div style={{ marginTop: 'auto', padding: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          {user?.role === 'admin' && (
-            <Link
-              to="/admin"
-              className="btn btn-ghost btn-full btn-sm"
-              style={{ justifyContent: 'flex-start', textDecoration: 'none', color: 'var(--gold-600)', border: '1px solid rgba(201,168,76,0.25)' }}
-            >
-              ⚙ Admin Panel
-            </Link>
-          )}
+        <div style={{ marginTop: 'auto', padding: '16px' }}>
           <button className="btn btn-ghost btn-full btn-sm" onClick={handleLogout} style={{ justifyContent: 'flex-start' }}>
             ⬡ Sign Out
           </button>
