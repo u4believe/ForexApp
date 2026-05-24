@@ -155,7 +155,7 @@ export default function Dashboard() {
             {statusBadge()}
             <div className="topbar-balance">
               <span style={{ color: 'var(--text-400)', fontSize: '0.78rem' }}>Balance</span>
-              <span style={{ fontWeight: 700, color: 'var(--gold-300)' }}>${(user?.balance || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+              <span style={{ fontWeight: 700, color: theme === 'light' ? '#111' : 'var(--gold-300)' }}>${(user?.balance || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
             </div>
           </div>
         </header>
