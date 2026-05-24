@@ -4,6 +4,8 @@ import { useAuth } from '../contexts/AuthContext';
 import AuthModal from '../components/AuthModal';
 import './Landing.css';
 
+const API_BASE = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : '/api';
+
 /* ---- SVG Icons ---- */
 const Icons = {
   Shield: () => (
@@ -181,7 +183,7 @@ function MarketTicker() {
 
   const fetchPrices = useCallback(async () => {
     try {
-      const res = await fetch('/api/market/prices');
+      const res = await fetch(`${API_BASE}/market/prices`);
       if (!res.ok) throw new Error('api');
       const data = await res.json();
       if (data.prices?.length) setPrices(data.prices);
@@ -319,7 +321,7 @@ function TradingPanel() {
   useEffect(() => {
     const load = async () => {
       try {
-        const r = await fetch('/api/market/prices');
+        const r = await fetch(`${API_BASE}/market/prices`);
         if (!r.ok) return;
         const d = await r.json();
         if (d.prices?.length) setPrices(d.prices);
@@ -952,7 +954,7 @@ function MarketCard({ asset, idx }) {
   useEffect(() => {
     const load = async () => {
       try {
-        const res = await fetch('/api/market/prices');
+        const res = await fetch(`${API_BASE}/market/prices`);
         if (!res.ok) return;
         const json = await res.json();
         if (json.prices?.[idx]) setData(json.prices[idx]);
