@@ -6,7 +6,7 @@ function getResend() {
   return resend;
 }
 
-const FROM = 'PrimePi Capital <noreply@primepicapital.xyz>';
+const FROM = 'CapitalPip Markets <noreply@primepicapital.xyz>';
 
 async function sendMail({ to, subject, html }) {
   if (!process.env.RESEND_API_KEY) {

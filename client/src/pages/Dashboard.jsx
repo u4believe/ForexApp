@@ -79,7 +79,7 @@ export default function Dashboard() {
         <div className="sidebar-header">
           <Link to="/" className="nav-logo" style={{ fontSize: '1.1rem', textDecoration: 'none', color: 'inherit' }}>
             <span className="logo-diamond">◆</span>
-            <span>PrimePi <span className="logo-capital">Capital</span></span>
+            <span>CapitalPip <span className="logo-capital">Markets</span></span>
           </Link>
           <button className="sidebar-close" onClick={() => setSidebarOpen(false)}>×</button>
         </div>
@@ -153,7 +153,7 @@ export default function Dashboard() {
           </button>
           <Link to="/" className="topbar-logo" style={{ textDecoration: 'none', color: 'inherit' }}>
             <span className="logo-diamond" style={{ color: 'var(--gold-500)' }}>◆</span>
-            <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '1rem' }}>PrimePi</span>
+            <span style={{ fontFamily: "'Playfair Display', serif", fontSize: '1rem' }}>CapitalPip</span>
           </Link>
           <div className="topbar-right">
             <button className="theme-toggle" onClick={toggleTheme} title="Toggle theme">

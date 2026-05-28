@@ -87,6 +87,6 @@ async function ensureAdminExists() {
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, async () => {
-  console.log(`PrimePi server running on port ${PORT}`);
+  console.log(`CapitalPip Markets server running on port ${PORT}`);
   await ensureAdminExists();
 });

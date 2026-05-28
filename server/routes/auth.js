@@ -27,11 +27,11 @@ async function sendVerificationEmail(email, token) {
   const link = `${siteUrl()}/verify-email/${token}`;
   await sendMail({
     to: email,
-    subject: 'Verify Your PrimePi Capital Account',
+    subject: 'Verify Your CapitalPip Markets Account',
     html: `
       <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#0B1628;color:#fff;padding:40px;border-radius:12px;">
         <div style="text-align:center;margin-bottom:30px;">
-          <h1 style="color:#C9A84C;font-size:28px;margin:0;">PrimePi Capital</h1>
+          <h1 style="color:#C9A84C;font-size:28px;margin:0;">CapitalPip Markets</h1>
           <p style="color:#8899AF;margin:5px 0 0;">Where Smart Money Grows</p>
         </div>
         <h2 style="color:#fff;font-size:22px;">Confirm Your Email Address</h2>
@@ -43,7 +43,7 @@ async function sendVerificationEmail(email, token) {
         </div>
         <p style="color:#8899AF;font-size:13px;">This link expires in 24 hours. If you did not create an account, please ignore this email.</p>
         <hr style="border-color:rgba(201,168,76,0.2);margin:30px 0;" />
-        <p style="color:#506070;font-size:12px;text-align:center;">&copy; 2024 PrimePi Capital. All rights reserved.</p>
+        <p style="color:#506070;font-size:12px;text-align:center;">&copy; 2024 CapitalPip Markets. All rights reserved.</p>
       </div>
     `,
   });
@@ -168,11 +168,11 @@ router.post('/forgot-password', async (req, res) => {
     const link = `${siteUrl()}/reset-password/${token}`;
     await sendMail({
       to: email.toLowerCase(),
-      subject: 'Reset Your PrimePi Capital Password',
+      subject: 'Reset Your CapitalPip Markets Password',
       html: `
         <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#0B1628;color:#fff;padding:40px;border-radius:12px;">
           <div style="text-align:center;margin-bottom:30px;">
-            <h1 style="color:#C9A84C;font-size:28px;margin:0;">PrimePi Capital</h1>
+            <h1 style="color:#C9A84C;font-size:28px;margin:0;">CapitalPip Markets</h1>
             <p style="color:#8899AF;margin:5px 0 0;">Where Smart Money Grows</p>
           </div>
           <h2 style="color:#fff;font-size:22px;">Password Reset Request</h2>
@@ -184,7 +184,7 @@ router.post('/forgot-password', async (req, res) => {
           </div>
           <p style="color:#8899AF;font-size:13px;">This link expires in <strong>1 hour</strong>. If you did not request a password reset, you can safely ignore this email — your password will not change.</p>
           <hr style="border-color:rgba(201,168,76,0.2);margin:30px 0;" />
-          <p style="color:#506070;font-size:12px;text-align:center;">&copy; 2024 PrimePi Capital. All rights reserved.</p>
+          <p style="color:#506070;font-size:12px;text-align:center;">&copy; 2024 CapitalPip Markets. All rights reserved.</p>
         </div>
       `,
     });

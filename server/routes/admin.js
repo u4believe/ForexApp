@@ -205,10 +205,10 @@ router.post('/users/:id/assign-plan', auth, adminOnly, async (req, res) => {
     try {
       await sendMail({
         to: user.email,
-        subject: 'Your Investment Plan Has Been Updated — PrimePi Capital',
+        subject: 'Your Investment Plan Has Been Updated — CapitalPip Markets',
         html: `
           <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#0B1628;color:#fff;padding:40px;border-radius:12px;">
-            <h1 style="color:#C9A84C;font-size:24px;margin:0 0 6px;">PrimePi Capital</h1>
+            <h1 style="color:#C9A84C;font-size:24px;margin:0 0 6px;">CapitalPip Markets</h1>
             <p style="color:#8899AF;margin:0 0 30px;font-size:0.9rem;">Investment Plan Update</p>
             <p style="color:#D4DCE8;line-height:1.6;">Hi ${user.full_name || 'Investor'},</p>
             <p style="color:#D4DCE8;line-height:1.6;">Your investment plan has been updated by our team. Here are your new plan details:</p>
@@ -222,7 +222,7 @@ router.post('/users/:id/assign-plan', auth, adminOnly, async (req, res) => {
             </div>
             <p style="color:#D4DCE8;line-height:1.6;">Log in to your dashboard to view your updated investment details.</p>
             <hr style="border-color:rgba(201,168,76,0.2);margin:24px 0;" />
-            <p style="color:#506070;font-size:0.78rem;text-align:center;">&copy; 2024 PrimePi Capital. All rights reserved.</p>
+            <p style="color:#506070;font-size:0.78rem;text-align:center;">&copy; 2024 CapitalPip Markets. All rights reserved.</p>
           </div>
         `,
       });

@@ -10,14 +10,14 @@ import AdminPanel from './pages/AdminPanel';
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
-  if (loading) return <div className="page-loader"><div className="spinner" /><span className="logo-text">PrimePi</span></div>;
+  if (loading) return <div className="page-loader"><div className="spinner" /><span className="logo-text">CapitalPip</span></div>;
   if (!user) return <Navigate to="/" replace />;
   return children;
 }
 
 function KycRoute({ children }) {
   const { user, loading } = useAuth();
-  if (loading) return <div className="page-loader"><div className="spinner" /><span className="logo-text">PrimePi</span></div>;
+  if (loading) return <div className="page-loader"><div className="spinner" /><span className="logo-text">CapitalPip</span></div>;
   if (!user) return <Navigate to="/" replace />;
   if (user.kyc_submitted) return <Navigate to="/dashboard" replace />;
   return children;

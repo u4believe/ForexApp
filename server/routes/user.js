@@ -131,7 +131,7 @@ router.post('/deposit', auth, async (req, res) => {
           subject: `New Deposit Notification — ${senderName} (${u.email})`,
           html: `
             <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#0B1628;color:#fff;padding:40px;border-radius:12px;">
-              <h1 style="color:#C9A84C;font-size:24px;margin:0 0 6px;">PrimePi Capital</h1>
+              <h1 style="color:#C9A84C;font-size:24px;margin:0 0 6px;">CapitalPip Markets</h1>
               <p style="color:#8899AF;margin:0 0 30px;font-size:0.9rem;">Deposit Notification Received</p>
               <table style="width:100%;border-collapse:collapse;">
                 <tr><td style="padding:8px 0;color:#8899AF;font-size:0.88rem;width:40%;">Sender Name</td><td style="padding:8px 0;color:#D4DCE8;font-size:0.88rem;">${senderName}</td></tr>
@@ -142,7 +142,7 @@ router.post('/deposit', auth, async (req, res) => {
                 ${txLine}
               </table>
               <hr style="border-color:rgba(201,168,76,0.2);margin:24px 0;" />
-              <p style="color:#506070;font-size:0.78rem;text-align:center;">&copy; 2024 PrimePi Capital — Admin Notification</p>
+              <p style="color:#506070;font-size:0.78rem;text-align:center;">&copy; 2024 CapitalPip Markets — Admin Notification</p>
             </div>
           `,
         });
@@ -179,7 +179,7 @@ router.post('/withdraw', auth, async (req, res) => {
           subject: `Withdrawal Request — ${senderName} (${u.email})`,
           html: `
             <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#0B1628;color:#fff;padding:40px;border-radius:12px;">
-              <h1 style="color:#C9A84C;font-size:24px;margin:0 0 6px;">PrimePi Capital</h1>
+              <h1 style="color:#C9A84C;font-size:24px;margin:0 0 6px;">CapitalPip Markets</h1>
               <p style="color:#8899AF;margin:0 0 30px;font-size:0.9rem;">Withdrawal Request Received</p>
               <table style="width:100%;border-collapse:collapse;">
                 <tr><td style="padding:8px 0;color:#8899AF;font-size:0.88rem;width:40%;">User Name</td><td style="padding:8px 0;color:#D4DCE8;font-size:0.88rem;">${senderName}</td></tr>
@@ -189,7 +189,7 @@ router.post('/withdraw', auth, async (req, res) => {
                 <tr><td style="padding:8px 0;color:#8899AF;font-size:0.88rem;">Wallet Address</td><td style="padding:8px 0;color:#D4DCE8;font-size:0.88rem;word-break:break-all;">${wallet_address.trim()}</td></tr>
               </table>
               <hr style="border-color:rgba(201,168,76,0.2);margin:24px 0;" />
-              <p style="color:#506070;font-size:0.78rem;text-align:center;">&copy; 2024 PrimePi Capital — Admin Notification</p>
+              <p style="color:#506070;font-size:0.78rem;text-align:center;">&copy; 2024 CapitalPip Markets — Admin Notification</p>
             </div>
           `,
         });

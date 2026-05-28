@@ -156,9 +156,9 @@ const STEPS = [
 ];
 
 const TESTIMONIALS = [
-  { quote: 'I moved a portion of my savings to PrimePi 14 months ago. The returns have been consistent every cycle and the dashboard gives complete visibility into every transaction.', name: 'Michael T.', title: 'Portfolio Manager',    location: 'London, UK',          plan: 'Premium Plan' },
+  { quote: 'I moved a portion of my savings to CapitalPip 14 months ago. The returns have been consistent every cycle and the dashboard gives complete visibility into every transaction.', name: 'Michael T.', title: 'Portfolio Manager',    location: 'London, UK',          plan: 'Premium Plan' },
   { quote: 'The KYC process was thorough, which actually gave me more confidence in the platform. After verification, my first payout arrived exactly on schedule.',                        name: 'Adaeze O.',   title: 'Business Consultant', location: 'Lagos, Nigeria',       plan: 'Growth Plan'  },
-  { quote: "I've used other crypto investment platforms and the difference with PrimePi is the professionalism. Withdrawals are processed promptly and support is always available.",    name: 'Carlos R.',   title: 'Software Engineer',   location: 'Mexico City, Mexico',  plan: 'Elite Plan'   },
+  { quote: "I've used other crypto investment platforms and the difference with CapitalPip is the professionalism. Withdrawals are processed promptly and support is always available.",    name: 'Carlos R.',   title: 'Software Engineer',   location: 'Mexico City, Mexico',  plan: 'Elite Plan'   },
 ];
 
 const FAQS = [
@@ -505,7 +505,7 @@ export default function Landing() {
         <div className="container lp-nav-inner">
           <div className="lp-logo">
             <span className="lp-logo-gem">◆</span>
-            PrimePi <span className="lp-logo-cap">Capital</span>
+            CapitalPip <span className="lp-logo-cap">Markets</span>
           </div>
 
           <ul className="lp-nav-links">
@@ -644,7 +644,7 @@ export default function Landing() {
                 A Regulated Investment Firm Built for the Digital Age
               </h2>
               <p className="lp-about-text">
-                PrimePi Capital is a professional investment management firm with over 54 months
+                CapitalPip Markets is a professional investment management firm with over 54 months
                 of verified operating history. We manage over $94 million in client assets across
                 Forex, Cryptocurrency and Equity markets — delivering consistent bi-weekly returns
                 through disciplined, algorithm-assisted portfolio management.
@@ -880,7 +880,7 @@ export default function Landing() {
             <div className="lp-footer-brand">
               <div className="lp-logo" style={{ marginBottom: 10 }}>
                 <span className="lp-logo-gem">◆</span>
-                PrimePi <span className="lp-logo-cap">Capital</span>
+                CapitalPip <span className="lp-logo-cap">Markets</span>
               </div>
               <p className="lp-footer-tagline">Where Smart Money Grows</p>
               <p className="lp-footer-desc">
@@ -931,7 +931,7 @@ export default function Landing() {
             <span>256-bit SSL Encrypted</span>
           </div>
           <div className="lp-footer-bottom">
-            <p>© 2025 PrimePi Capital. All rights reserved.</p>
+            <p>© 2025 CapitalPip Markets. All rights reserved.</p>
             <p className="lp-footer-risk">
               Risk Disclosure: Investment in financial instruments involves substantial risk and may not be suitable for all investors.
               Past performance does not guarantee future results. Please invest only what you can afford to lose.

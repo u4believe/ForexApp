@@ -108,7 +108,7 @@ export default function AdminPanel() {
       }}>
         <div style={{ padding: '0 4px', marginBottom: '20px' }}>
           <div style={{ fontSize: '0.7rem', color: 'var(--gold-500)', letterSpacing: '0.15em', marginBottom: '4px' }}>◆ ADMIN PANEL</div>
-          <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.1rem' }}>PrimePi</div>
+          <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.1rem' }}>CapitalPip</div>
         </div>
 
         {[
