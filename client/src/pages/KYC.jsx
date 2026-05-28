@@ -78,7 +78,7 @@ export default function KYC() {
     }}>
       <div style={{ textAlign: 'center', marginBottom: 28 }}>
         <div style={{ fontSize: '0.68rem', color: 'var(--gold-600)', letterSpacing: '0.16em', fontWeight: 700, marginBottom: 8 }}>
-          ◆ PRIMEPI CAPITAL
+          ◆ CAPITALPIP MARKETS
         </div>
         <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.75rem', marginBottom: 8 }}>
           Identity Verification

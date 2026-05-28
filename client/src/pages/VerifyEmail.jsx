@@ -36,7 +36,7 @@ export default function VerifyEmail() {
         boxShadow: 'var(--shadow-lg)',
       }}>
         <div style={{ fontSize: '0.68rem', color: 'var(--gold-600)', letterSpacing: '0.16em', fontWeight: 700, marginBottom: 28 }}>
-          ◆ PRIMEPI CAPITAL
+          ◆ CAPITALPIP MARKETS
         </div>
 
         {status === 'verifying' && (

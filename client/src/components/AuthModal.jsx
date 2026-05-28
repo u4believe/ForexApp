@@ -62,7 +62,7 @@ export default function AuthModal({ mode, onClose, onSwitch }) {
 
         <div style={{ textAlign: 'center', marginBottom: 24 }}>
           <div style={{ fontSize: '0.68rem', color: 'var(--gold-600)', letterSpacing: '0.16em', fontWeight: 700, marginBottom: 8 }}>
-            ◆ PRIMEPI CAPITAL
+            ◆ CAPITALPIP MARKETS
           </div>
           <h2 style={{ fontSize: '1.5rem', marginBottom: 6 }}>
             {step === 'forgot' ? 'Reset Password' : step === 'forgot-sent' ? 'Check Your Email' : isRegister ? 'Create Your Account' : 'Sign In'}
