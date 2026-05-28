@@ -108,7 +108,6 @@ const TICKER_ASSETS = [
 
 const TRUST_ITEMS = [
   { Icon: Icons.Award,    title: 'Financial Commission', sub: 'Licensed Member' },
-  { Icon: Icons.Building, title: 'SEC Registered',       sub: 'CIK: 0002147398' },
   { Icon: Icons.Lock,     title: '256-bit SSL',          sub: 'Bank-grade Encryption' },
   { Icon: Icons.Shield,   title: 'Segregated Accounts',  sub: 'Client Funds Protected' },
   { Icon: Icons.CheckCircle, title: 'KYC/AML Compliant', sub: '40+ Countries Served' },
@@ -924,8 +923,6 @@ export default function Landing() {
             </div>
           </div>
           <div className="lp-footer-reg">
-            <span>SEC Registered · CIK: 0002147398</span>
-            <span className="lp-footer-reg-sep">|</span>
             <span>Financial Commission · Member No. 2013-09-0001</span>
             <span className="lp-footer-reg-sep">|</span>
             <span>256-bit SSL Encrypted</span>
