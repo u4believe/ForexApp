@@ -47,7 +47,11 @@ export default function AuthModal({ mode, onClose, onSwitch }) {
       const res = await api.post('/auth/login', { email: form.email, password: form.password });
       login(res.data.token, res.data.user);
       onClose();
-      navigate(res.data.user.kyc_submitted ? '/dashboard' : '/kyc');
+      if (res.data.user.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate(res.data.user.kyc_submitted ? '/dashboard' : '/kyc');
+      }
     } catch (err) {
       setError(err.response?.data?.error || 'Login failed. Please try again.');
     } finally { setLoading(false); }
