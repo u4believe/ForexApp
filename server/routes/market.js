@@ -2,107 +2,99 @@ const express = require('express');
 const router = express.Router();
 const https = require('https');
 
-const SYMBOLS = [
-  { yahoo: 'GC=F',      label: 'XAUUSD' },
-  { yahoo: 'EURUSD=X',  label: 'EURUSD' },
-  { yahoo: 'USDJPY=X',  label: 'USDJPY' },
-  { yahoo: 'NVDA',      label: 'NVDA'   },
-  { yahoo: 'TSLA',      label: 'TSLA'   },
-  { yahoo: 'BTC-USD',   label: 'BTCUSD' },
-  { yahoo: 'ETH-USD',   label: 'ETHUSD' },
-  { yahoo: '^GSPC',     label: 'SPX'    },
+// stooq.com symbols — free, no API key, not IP-blocked
+const STOOQ_SYMBOLS = [
+  { stooq: 'xauusd',   label: 'XAUUSD' },
+  { stooq: 'eurusd',   label: 'EURUSD' },
+  { stooq: 'usdjpy',   label: 'USDJPY' },
+  { stooq: 'nvda.us',  label: 'NVDA'   },
+  { stooq: 'tsla.us',  label: 'TSLA'   },
+  { stooq: 'btcusd',   label: 'BTCUSD' },
+  { stooq: '%5espx',   label: 'SPX'    }, // ^SPX URL-encoded
 ];
 
+// Fallback prices (updated to current market levels)
 const FALLBACK = [
-  { symbol: 'XAUUSD',  price: 3320.40,  change:  12.30, pct:  0.37 },
-  { symbol: 'EURUSD',  price:  1.1318,  change:  0.0021, pct:  0.19 },
-  { symbol: 'USDJPY',  price: 143.52,   change: -0.28,  pct: -0.19 },
-  { symbol: 'NVDA',    price: 135.28,   change:  2.84,  pct:  2.14 },
-  { symbol: 'TSLA',    price: 339.47,   change: -4.20,  pct: -1.22 },
-  { symbol: 'BTCUSD',  price: 108240,   change: 1340.0, pct:  1.25 },
-  { symbol: 'ETHUSD',  price: 2540.80,  change:  48.20, pct:  1.93 },
-  { symbol: 'SPX',     price: 5912.80,  change:  28.60, pct:  0.49 },
+  { symbol: 'XAUUSD', price: 4419.44, change: -9.00,  pct: -0.20 },
+  { symbol: 'EURUSD', price:  1.1614, change:  0.0012, pct:  0.10 },
+  { symbol: 'USDJPY', price: 159.58,  change: -0.28,  pct: -0.18 },
+  { symbol: 'NVDA',   price: 212.60,  change:  2.84,  pct:  1.34 },
+  { symbol: 'TSLA',   price: 440.23,  change: -4.20,  pct: -0.95 },
+  { symbol: 'BTCUSD', price: 74288,   change: 800.0,  pct:  1.09 },
+  { symbol: 'ETHUSD', price: 2016,    change:  22.5,  pct:  1.13 },
+  { symbol: 'SPX',    price: 7520.40, change:  28.60, pct:  0.38 },
 ];
 
 let cache = null;
 let cacheTs = 0;
 
-const BROWSER_HEADERS = {
-  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-  'Accept': 'application/json, text/plain, */*',
-  'Accept-Language': 'en-US,en;q=0.9',
-  'Origin': 'https://finance.yahoo.com',
-  'Referer': 'https://finance.yahoo.com/',
-};
-
-// Primary: batch v7 quote API — one request for all symbols
-function fetchAllQuotes() {
-  return new Promise((resolve, reject) => {
-    const symbolList = SYMBOLS.map(s => encodeURIComponent(s.yahoo)).join('%2C');
+// Fetch a single symbol from stooq CSV API
+function fetchStooq(sym, fallback) {
+  return new Promise((resolve) => {
     const options = {
-      hostname: 'query1.finance.yahoo.com',
-      path: `/v7/finance/quote?symbols=${symbolList}&fields=regularMarketPrice,regularMarketChange,regularMarketChangePercent`,
+      hostname: 'stooq.com',
+      path: `/q/l/?s=${sym.stooq}&f=sd2t2ohlcv&h&e=csv`,
       method: 'GET',
-      headers: BROWSER_HEADERS,
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; MarketBot/1.0)' },
     };
 
     const req = https.request(options, (res) => {
-      const chunks = [];
-      res.on('data', c => chunks.push(c));
+      let raw = '';
+      res.on('data', c => { raw += c; });
       res.on('end', () => {
         try {
-          const json = JSON.parse(Buffer.concat(chunks).toString());
-          const results = json?.quoteResponse?.result;
-          if (!results || results.length === 0) throw new Error('empty response');
-
-          const prices = SYMBOLS.map((sym, i) => {
-            const q = results.find(r => r.symbol === sym.yahoo);
-            if (!q || q.regularMarketPrice == null) return FALLBACK[i];
-            return {
-              symbol: sym.label,
-              price:  q.regularMarketPrice,
-              change: q.regularMarketChange ?? 0,
-              pct:    q.regularMarketChangePercent ?? 0,
-            };
-          });
-          resolve(prices);
-        } catch (e) { reject(e); }
+          const lines = raw.trim().split('\n');
+          if (lines.length < 2) throw new Error('no data rows');
+          const parts = lines[1].split(',');
+          // parts: Symbol, Date, Time, Open, High, Low, Close, Volume
+          if (!parts[6] || parts[6].trim() === 'N/D') throw new Error('N/D');
+          const open  = parseFloat(parts[3]);
+          const close = parseFloat(parts[6]);
+          if (isNaN(close) || isNaN(open)) throw new Error('parse error');
+          const change = close - open;
+          const pct    = open !== 0 ? (change / open) * 100 : 0;
+          resolve({ symbol: sym.label, price: close, change, pct });
+        } catch {
+          resolve(fallback);
+        }
       });
     });
-    req.on('error', reject);
-    req.setTimeout(10000, () => { req.destroy(); reject(new Error('timeout')); });
+
+    req.on('error', () => resolve(fallback));
+    req.setTimeout(8000, () => { req.destroy(); resolve(fallback); });
     req.end();
   });
 }
 
-// Fallback: per-symbol chart API
-function fetchQuoteFallback(sym, index) {
+// ETH from CoinGecko (stooq ETH symbol is unreliable)
+function fetchEth(fallback) {
   return new Promise((resolve) => {
-    const encoded = encodeURIComponent(sym.yahoo);
     const options = {
-      hostname: 'query2.finance.yahoo.com',
-      path: `/v8/finance/chart/${encoded}?interval=1d&range=1d`,
+      hostname: 'api.coingecko.com',
+      path: '/api/v3/simple/price?ids=ethereum&vs_currencies=usd&include_24h_change=true',
       method: 'GET',
-      headers: BROWSER_HEADERS,
+      headers: { 'User-Agent': 'Mozilla/5.0', 'Accept': 'application/json' },
     };
+
     const req = https.request(options, (res) => {
-      const chunks = [];
-      res.on('data', c => chunks.push(c));
+      let raw = '';
+      res.on('data', c => { raw += c; });
       res.on('end', () => {
         try {
-          const json = JSON.parse(Buffer.concat(chunks).toString());
-          const meta = json.chart?.result?.[0]?.meta;
-          if (!meta || meta.regularMarketPrice == null) throw new Error('no price');
-          const price  = meta.regularMarketPrice;
-          const prev   = meta.previousClose ?? meta.chartPreviousClose ?? price;
-          const change = price - prev;
-          const pct    = prev ? (change / prev) * 100 : 0;
-          resolve({ symbol: sym.label, price, change, pct });
-        } catch { resolve(FALLBACK[index]); }
+          const json = JSON.parse(raw);
+          const eth = json.ethereum;
+          if (!eth || eth.usd == null) throw new Error('no data');
+          const price = eth.usd;
+          const pct   = eth.usd_24h_change ?? 0;
+          resolve({ symbol: 'ETHUSD', price, change: price * pct / 100, pct });
+        } catch {
+          resolve(fallback);
+        }
       });
     });
-    req.on('error', () => resolve(FALLBACK[index]));
-    req.setTimeout(8000, () => { req.destroy(); resolve(FALLBACK[index]); });
+
+    req.on('error', () => resolve(fallback));
+    req.setTimeout(8000, () => { req.destroy(); resolve(fallback); });
     req.end();
   });
 }
@@ -112,13 +104,23 @@ router.get('/prices', async (_req, res) => {
   if (cache && now - cacheTs < 60000) return res.json(cache);
 
   try {
-    let prices;
-    try {
-      prices = await fetchAllQuotes();
-    } catch {
-      // Batch endpoint failed — try per-symbol as last resort
-      prices = await Promise.all(SYMBOLS.map((sym, i) => fetchQuoteFallback(sym, i)));
-    }
+    // Fetch all in parallel
+    const [stooqResults, eth] = await Promise.all([
+      Promise.all(STOOQ_SYMBOLS.map((sym, i) => fetchStooq(sym, FALLBACK[i < 6 ? i : i + 1]))),
+      fetchEth(FALLBACK[6]),
+    ]);
+
+    // Merge: insert ETH between BTCUSD (index 5) and SPX (index 6)
+    const prices = [
+      stooqResults[0], // XAUUSD
+      stooqResults[1], // EURUSD
+      stooqResults[2], // USDJPY
+      stooqResults[3], // NVDA
+      stooqResults[4], // TSLA
+      stooqResults[5], // BTCUSD
+      eth,             // ETHUSD
+      stooqResults[6], // SPX
+    ];
 
     cache = { prices, ts: now };
     cacheTs = now;
