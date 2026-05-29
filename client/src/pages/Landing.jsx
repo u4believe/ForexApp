@@ -462,12 +462,25 @@ export default function Landing() {
   const [modal, setModal] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [pastHero, setPastHero] = useState(false);
   const [theme, setTheme] = useState(() => localStorage.getItem('pv_theme') || 'light');
+  const heroRef = useRef(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    const hero = heroRef.current;
+    if (!hero) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setPastHero(!entry.isIntersecting),
+      { threshold: 0 }
+    );
+    obs.observe(hero);
+    return () => obs.disconnect();
   }, []);
 
   useEffect(() => {
@@ -552,7 +565,7 @@ export default function Landing() {
       </nav>
 
       {/* ── Hero ── */}
-      <section className="lp-hero">
+      <section ref={heroRef} className="lp-hero">
         <div className="lp-hero-bg" />
         <div className="container lp-hero-inner">
           <div className="lp-hero-content">
@@ -581,12 +594,13 @@ export default function Landing() {
           </div>
         </div>
 
-        {/* Mobile CTAs */}
-        <div className="lp-mobile-cta">
-          <button className="btn btn-gold btn-full btn-lg" onClick={() => open('register')}>Open Account</button>
-          <button className="btn btn-outline btn-full" onClick={() => open('login')}>Already a member? Sign In</button>
-        </div>
       </section>
+
+      {/* Mobile sticky CTA — fixed at bottom, only shown after scrolling past hero */}
+      <div className={`lp-mobile-cta${pastHero ? ' lp-mobile-cta--visible' : ''}`}>
+        <button className="btn btn-gold btn-full btn-lg" onClick={() => open('register')}>Open Account</button>
+        <button className="btn btn-outline btn-full" onClick={() => open('login')}>Already a member? Sign In</button>
+      </div>
 
       {/* ── Market Ticker (scrolling strip, after hero) ── */}
       <MarketTicker />
