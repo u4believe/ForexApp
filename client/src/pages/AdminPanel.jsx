@@ -271,8 +271,9 @@ export default function AdminPanel() {
                     ['Home Address', selectedUser.user.address || '—'],
                     ['Joined', formatDate(selectedUser.user.created_at)],
                     ['Email Verified', selectedUser.user.email_verified ? 'Yes' : 'No'],
-                    ['Next of Kin', selectedUser.user.nok_name || '—'],
-                    ['NOK Contact', selectedUser.user.nok_phone || selectedUser.user.nok_email || '—'],
+                    ['Next of Kin Name', selectedUser.user.nok_name || '—'],
+                    ['NOK Phone', selectedUser.user.nok_phone || '—'],
+                    ['NOK Email', selectedUser.user.nok_email || '—'],
                   ].map(([k, v]) => (
                     <div key={k} style={{ background: 'var(--section-alt)', borderRadius: 'var(--radius-sm)', padding: '12px' }}>
                       <div style={{ fontSize: '0.72rem', color: 'var(--text-faint)', marginBottom: '4px' }}>{k}</div>

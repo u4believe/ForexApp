@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import AuthModal from '../components/AuthModal';
+import FloatingChat from '../components/FloatingChat';
 import './Landing.css';
 
 const API_BASE = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : '/api';
@@ -169,11 +170,6 @@ const FAQS = [
   { q: 'How long does identity verification take?',  a: 'Most KYC reviews are completed within 1–2 business days. You will be notified via email once your account status is updated. You may deposit funds during this period.' },
 ];
 
-const CYCLES = [
-  { label: 'Cycle 1', pct: 11.2 }, { label: 'Cycle 2', pct: 8.7 },
-  { label: 'Cycle 3', pct: 13.4 }, { label: 'Cycle 4', pct: 10.1 },
-  { label: 'Cycle 5', pct: 11.8 }, { label: 'Cycle 6', pct: 8.5, current: true },
-];
 
 /* ---- Market Ticker (CSS scrolling animation) ---- */
 function MarketTicker() {
@@ -571,7 +567,7 @@ export default function Landing() {
               fully managed by our expert trading team. Transparent, secure, and consistently profitable.
             </p>
             <div className="lp-hero-cta">
-              <button className="btn btn-gold btn-lg" onClick={() => open('register')}>Open Free Account</button>
+              <button className="btn btn-gold btn-lg" onClick={() => open('register')}>Open Account</button>
               <button className="btn btn-outline btn-lg" onClick={() => open('login')}>Sign In</button>
             </div>
             <div className="lp-hero-trust">
@@ -587,7 +583,7 @@ export default function Landing() {
 
         {/* Mobile CTAs */}
         <div className="lp-mobile-cta">
-          <button className="btn btn-gold btn-full btn-lg" onClick={() => open('register')}>Open Free Account</button>
+          <button className="btn btn-gold btn-full btn-lg" onClick={() => open('register')}>Open Account</button>
           <button className="btn btn-outline btn-full" onClick={() => open('login')}>Already a member? Sign In</button>
         </div>
       </section>
@@ -853,7 +849,7 @@ export default function Landing() {
             Account setup takes less than five minutes.
           </p>
           <div className="lp-cta-btns">
-            <button className="btn btn-gold btn-lg" onClick={() => open('register')}>Open Free Account</button>
+            <button className="btn btn-gold btn-lg" onClick={() => open('register')}>Open Account</button>
             <button className="btn btn-outline btn-lg" onClick={() => open('login')}>Sign In</button>
           </div>
         </div>
@@ -914,10 +910,21 @@ export default function Landing() {
               <div className="lp-footer-col">
                 <h4>Legal</h4>
                 <ul>
-                  <li><a href="#">Privacy Policy</a></li>
-                  <li><a href="#">Terms of Service</a></li>
-                  <li><a href="#">Risk Disclosure</a></li>
-                  <li><a href="#">AML Policy</a></li>
+                  <li><a href="/legal/privacy-policy">Privacy Policy</a></li>
+                  <li><a href="/legal/terms-of-service">Terms of Service</a></li>
+                  <li><a href="/legal/risk-disclosure">Risk Disclosure</a></li>
+                  <li><a href="/legal/aml-policy">AML Policy</a></li>
+                </ul>
+              </div>
+              <div className="lp-footer-col">
+                <h4>Support</h4>
+                <ul>
+                  <li><a href="mailto:support.capitalpip@gmail.com">support.capitalpip@gmail.com</a></li>
+                  <li>
+                    <a href="https://wa.me/17578324485" target="_blank" rel="noopener noreferrer">
+                      WhatsApp: +1 (757) 832-4485
+                    </a>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -940,6 +947,8 @@ export default function Landing() {
       {modal && (
         <AuthModal mode={modal} onClose={() => setModal(null)} onSwitch={(m) => setModal(m)} />
       )}
+
+      <FloatingChat />
     </div>
   );
 }

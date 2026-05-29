@@ -7,6 +7,7 @@ import ResetPassword from './pages/ResetPassword';
 import KYC from './pages/KYC';
 import Dashboard from './pages/Dashboard';
 import AdminPanel from './pages/AdminPanel';
+import LegalPage from './pages/LegalPage';
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
@@ -39,6 +40,7 @@ function AppRoutes() {
       <Route path="/kyc" element={<KycRoute><KYC /></KycRoute>} />
       <Route path="/dashboard/*" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
       <Route path="/admin/*" element={<AdminRoute><AdminPanel /></AdminRoute>} />
+      <Route path="/legal/:slug" element={<LegalPage />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
