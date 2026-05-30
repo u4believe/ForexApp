@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const WHATSAPP = '17578324485';
+const WHATSAPP = '15012293767';
 const EMAIL = 'support.capitalpip@gmail.com';
 
 export default function FloatingChat() {

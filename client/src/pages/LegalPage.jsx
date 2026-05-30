@@ -43,7 +43,7 @@ const DOCS = {
       },
       {
         heading: '10. Contact Us',
-        body: `If you have questions or concerns about this Privacy Policy or our data practices, please contact us:\n\n• Email: support.capitalpip@gmail.com\n• WhatsApp: +1 (757) 832-4485`,
+        body: `If you have questions or concerns about this Privacy Policy or our data practices, please contact us:\n\n• Email: support.capitalpip@gmail.com\n• WhatsApp: +1 (501) 229-3767`,
       },
     ],
   },
@@ -102,7 +102,7 @@ const DOCS = {
       },
       {
         heading: '13. Contact',
-        body: `For questions about these Terms, contact us at:\n\n• Email: support.capitalpip@gmail.com\n• WhatsApp: +1 (757) 832-4485`,
+        body: `For questions about these Terms, contact us at:\n\n• Email: support.capitalpip@gmail.com\n• WhatsApp: +1 (501) 229-3767`,
       },
     ],
   },
@@ -204,7 +204,7 @@ const DOCS = {
       },
       {
         heading: '11. Contact',
-        body: `To report concerns about potential money laundering or financial crime, or for questions about this policy, contact our compliance team:\n\n• Email: support.capitalpip@gmail.com\n• WhatsApp: +1 (757) 832-4485`,
+        body: `To report concerns about potential money laundering or financial crime, or for questions about this policy, contact our compliance team:\n\n• Email: support.capitalpip@gmail.com\n• WhatsApp: +1 (501) 229-3767`,
       },
     ],
   },
@@ -289,7 +289,7 @@ export default function LegalPage() {
             support.capitalpip@gmail.com
           </a>{' '}
           or WhatsApp{' '}
-          <a href="https://wa.me/17578324485" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--gold-600)' }}>
+          <a href="https://wa.me/15012293767" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--gold-600)' }}>
             +1 (501) 229-3767
           </a>
         </div>
