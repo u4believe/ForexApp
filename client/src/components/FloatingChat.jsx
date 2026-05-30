@@ -74,7 +74,7 @@ export default function FloatingChat() {
                   fontSize: '0.92rem',
                 }}
               >
-                📱 +1 (757) 832-4485
+                📱 +1 (501) 229-3767
               </a>
               <p style={{ margin: '10px 0 0', fontSize: '0.76rem', color: 'var(--text-faint, #506070)' }}>
                 Email:{' '}

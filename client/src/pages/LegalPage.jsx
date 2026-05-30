@@ -290,7 +290,7 @@ export default function LegalPage() {
           </a>{' '}
           or WhatsApp{' '}
           <a href="https://wa.me/17578324485" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--gold-600)' }}>
-            +1 (757) 832-4485
+            +1 (501) 229-3767
           </a>
         </div>
 
