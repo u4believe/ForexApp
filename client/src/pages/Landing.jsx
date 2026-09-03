@@ -936,7 +936,7 @@ export default function Landing() {
                   <li><a href="mailto:support.capitalpip@gmail.com">support.capitalpip@gmail.com</a></li>
                   <li>
                     <a href="https://wa.me/15012293767" target="_blank" rel="noopener noreferrer">
-                      WhatsApp: +1 (501) 229-3767
+                      WhatsApp: +1 (603) 439-0743
                     </a>
                   </li>
                 </ul>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const WHATSAPP = '15012293767';
+const WHATSAPP = '16034390743';
 const EMAIL = 'support.capitalpip@gmail.com';
 
 export default function FloatingChat() {
@@ -74,7 +74,7 @@ export default function FloatingChat() {
                   fontSize: '0.92rem',
                 }}
               >
-                📱 +1 (501) 229-3767
+                📱 +1 (603) 439-0743
               </a>
               <p style={{ margin: '10px 0 0', fontSize: '0.76rem', color: 'var(--text-faint, #506070)' }}>
                 Email:{' '}
