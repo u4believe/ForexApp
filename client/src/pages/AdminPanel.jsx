@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
+import '../styles/stacked-table.css';
 import './AdminPanel.css';
 
 export default function AdminPanel() {
@@ -355,7 +356,7 @@ export default function AdminPanel() {
                     <div style={{ fontSize: '0.78rem', color: 'var(--text-faint)', marginBottom: '10px' }}>
                       Account Balance — current: <strong style={{ color: 'var(--gold-600)' }}>${(selectedUser.user.balance || 0).toFixed(2)}</strong>
                     </div>
-                    <div className="dash-action-row" style={{ gap: '8px' }}>
+                    <div className="admin-action-row">
                       <input
                         type="number"
                         min="0"
@@ -380,7 +381,7 @@ export default function AdminPanel() {
                 {/* Assign Plan */}
                 <div style={{ marginBottom: '20px' }}>
                   <div style={{ fontSize: '0.78rem', color: 'var(--text-faint)', marginBottom: '10px' }}>Assign Investment Plan</div>
-                  <div className="dash-action-row" style={{ gap: '8px' }}>
+                  <div className="admin-action-row">
                     <select
                       className="form-input"
                       style={{ maxWidth: '180px', flex: '1 1 140px' }}

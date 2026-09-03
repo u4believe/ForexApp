@@ -190,7 +190,7 @@ export default function Profile() {
           </div>
 
           <button
-            className="btn btn-ghost btn-full"
+            className="btn btn-ghost btn-full profile-signout"
             style={{ marginTop: '16px' }}
             onClick={() => { logout(); window.location.href = '/'; }}
           >

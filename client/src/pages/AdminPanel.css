@@ -33,6 +33,14 @@
   overflow-y: auto;
 }
 
+/* Input + button pairs that stack rather than overflow. */
+.admin-action-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 /* Heading + action button. Wraps rather than squeezing the button. */
 .admin-head-row {
   display: flex;
@@ -96,6 +104,9 @@
 
 @media (max-width: 600px) {
   .admin-main { padding: 16px 12px; }
+  .admin-action-row > .btn,
+  .admin-action-row > .form-input,
+  .admin-action-row > select { width: 100%; max-width: none !important; }
   .admin-detail-grid { grid-template-columns: 1fr; }
   .admin-head-row h2 { font-size: 1.3rem; }
 }

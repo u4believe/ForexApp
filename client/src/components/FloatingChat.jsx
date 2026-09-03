@@ -19,7 +19,6 @@ export default function FloatingChat() {
         <div style={{
           position: 'absolute', bottom: '68px', right: 0,
           width: '318px',
-          maxWidth: 'calc(100vw - 48px)',
           background: 'var(--section-bg, #0B1D3A)',
           border: '1px solid var(--border, rgba(255,255,255,0.08))',
           borderRadius: '16px',

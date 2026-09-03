@@ -387,12 +387,7 @@ img { max-width: 100%; }
 @keyframes slideUp { from { transform: translateY(24px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
 /* ========== TABLE ========== */
-.table-wrap {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-}
+.table-wrap { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--border); }
 .data-table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
 .data-table th {
   background: var(--section-alt);
@@ -506,73 +501,9 @@ img { max-width: 100%; }
 }
 .theme-toggle:hover { background: var(--border); color: var(--text-primary); }
 
-/* ==========================================================================
-   STACKED TABLES
-   A table marked `table-wrap table-stack` drops its header on small screens
-   and renders each row as a card, with every cell labelled from its
-   `data-label`. This replaces horizontal scrolling, which reads as broken
-   layout on a phone.
-   ========================================================================== */
-@media (max-width: 640px) {
-  .table-wrap.table-stack {
-    overflow-x: visible;
-    border: none;
-    border-radius: 0;
-  }
-  .table-stack .data-table,
-  .table-stack .data-table tbody,
-  .table-stack .data-table tr,
-  .table-stack .data-table td {
-    display: block;
-    width: 100%;
-  }
-  .table-stack .data-table thead { display: none; }
-  .table-stack .data-table tr {
-    background: var(--section-bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    margin-bottom: 10px;
-    overflow: hidden;
-  }
-  .table-stack .data-table tr:last-child { margin-bottom: 0; }
-  .table-stack .data-table td {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 14px;
-    padding: 10px 14px;
-    text-align: right;
-    border-bottom: 1px solid var(--border-light);
-    overflow-wrap: anywhere;
-  }
-  .table-stack .data-table td::before {
-    content: attr(data-label);
-    flex-shrink: 0;
-    text-align: left;
-    font-size: 0.69rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--text-faint);
-  }
-  .table-stack .data-table td:empty { display: none; }
-  .table-stack .data-table td:last-child { border-bottom: none; }
-  .table-stack .data-table tr:hover td { background: transparent; }
-}
-
 /* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
   .container { padding: 0 16px; }
   .modal-box { padding: 24px 20px; }
   .card { padding: 20px; }
-}
-
-@media (max-width: 480px) {
-  .card { padding: 16px 14px; }
-  .modal-overlay { padding: 12px; }
-  .modal-box { padding: 22px 16px; border-radius: var(--radius); }
-  .btn { padding: 11px 18px; }
-  .btn-lg { padding: 13px 22px; }
-  .copy-field { flex-wrap: wrap; }
-  .copy-field .copy-btn { margin-left: auto; }
 }

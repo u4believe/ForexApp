@@ -7,6 +7,7 @@ import Deposit from '../components/dashboard/Deposit';
 import Withdraw from '../components/dashboard/Withdraw';
 import Investments from '../components/dashboard/Investments';
 import Profile from '../components/dashboard/Profile';
+import '../styles/stacked-table.css';
 import './Dashboard.css';
 
 const SunIcon = () => (
@@ -137,7 +138,7 @@ export default function Dashboard() {
           </div>
         )}
 
-        <div style={{ marginTop: 'auto', padding: '16px' }}>
+        <div className="sidebar-signout">
           <button className="btn btn-ghost btn-full btn-sm" onClick={handleLogout} style={{ justifyContent: 'flex-start' }}>
             ⬡ Sign Out
           </button>

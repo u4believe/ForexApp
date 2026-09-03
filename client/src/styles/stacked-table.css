@@ -1,0 +1,54 @@
+/* ==========================================================================
+   STACKED TABLES — dashboard / admin only.
+   Deliberately kept out of index.css so nothing here can reach the landing
+   page. A table marked `table-wrap table-stack` drops its header on small
+   screens and renders each row as a card, labelling every cell from its
+   `data-label`. This replaces horizontal scrolling, which reads as a broken
+   layout on a phone.
+   ========================================================================== */
+@media (max-width: 640px) {
+  .table-wrap.table-stack {
+    overflow-x: visible;
+    border: none;
+    border-radius: 0;
+  }
+  .table-stack .data-table,
+  .table-stack .data-table tbody,
+  .table-stack .data-table tr,
+  .table-stack .data-table td {
+    display: block;
+    width: 100%;
+  }
+  .table-stack .data-table thead { display: none; }
+  .table-stack .data-table tr {
+    background: var(--section-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .table-stack .data-table tr:last-child { margin-bottom: 0; }
+  .table-stack .data-table td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 10px 14px;
+    text-align: right;
+    border-bottom: 1px solid var(--border-light);
+    overflow-wrap: anywhere;
+  }
+  .table-stack .data-table td::before {
+    content: attr(data-label);
+    flex-shrink: 0;
+    text-align: left;
+    font-size: 0.69rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+  .table-stack .data-table td:empty { display: none; }
+  .table-stack .data-table td:last-child { border-bottom: none; }
+  .table-stack .data-table tr:hover td { background: transparent; }
+}

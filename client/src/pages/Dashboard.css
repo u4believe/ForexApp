@@ -1,6 +1,7 @@
 .dashboard-layout {
   display: flex;
   min-height: 100vh;
+  max-width: 100%;
   background: var(--page-bg);
 }
 
@@ -142,6 +143,11 @@
 }
 .sidebar-notice-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
 
+.sidebar-signout {
+  margin-top: auto;
+  padding: 16px;
+}
+
 .sidebar-overlay {
   display: none;
   position: fixed;
@@ -155,6 +161,8 @@
 .dashboard-main {
   flex: 1;
   min-width: 0;
+  max-width: 100%;
+  overflow-x: clip;
   display: flex;
   flex-direction: column;
 }
@@ -212,7 +220,9 @@
   display: flex;
   align-items: center;
   gap: 14px;
+  min-width: 0;
 }
+.topbar-right > .badge { white-space: nowrap; flex-shrink: 0; }
 
 .topbar-balance {
   display: flex;
@@ -225,7 +235,7 @@
 }
 
 /* ========== CONTENT ========== */
-.dashboard-content { padding: 32px; flex: 1; }
+.dashboard-content { padding: 32px; flex: 1; min-width: 0; max-width: 100%; }
 
 .dash-page-title {
   font-size: 1.5rem;
@@ -300,14 +310,6 @@
   flex-wrap: wrap;
 }
 
-/* Banner: icon + copy, wraps on narrow screens. */
-.dash-banner {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
 /* Long values (balances, emails, addresses) must never push the layout wider. */
 .dash-stat-value,
 .dash-stat-sub,
@@ -329,8 +331,23 @@
     left: 0; top: 0;
     width: min(280px, 84vw);
     transform: translateX(-100%);
+    min-height: 0;
     height: 100%;
+    height: 100dvh;
+    max-height: 100%;
+    max-height: 100dvh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
     z-index: 300;
+  }
+  /* Pin Sign Out to the bottom of the drawer so it is always reachable,
+     and keep it clear of the home indicator / browser chrome. */
+  .sidebar-signout {
+    position: sticky;
+    bottom: 0;
+    background: var(--section-bg);
+    border-top: 1px solid var(--border-light);
+    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
   }
   .sidebar.sidebar-open { transform: translateX(0); }
   .sidebar-close { display: flex; }
@@ -345,6 +362,11 @@
   .dash-stats-row { grid-template-columns: repeat(2, 1fr); }
 
   .dash-grid-2 { grid-template-columns: 1fr; gap: 20px; }
+
+  /* Once the columns stack, this sits between the Account Security and
+     Next of Kin cards, interrupting the page. The drawer pins its own
+     Sign Out on mobile, so drop the duplicate. */
+  .profile-signout { display: none; }
 }
 
 @media (max-width: 700px) {
@@ -355,6 +377,7 @@
   .dashboard-topbar { padding: 10px 12px; gap: 8px; min-height: 54px; }
   .topbar-right { gap: 8px; }
   .topbar-balance { padding: 5px 9px; }
+  .topbar-balance span { white-space: nowrap; }
   .topbar-balance span { font-size: 0.72rem !important; }
   .topbar-balance span:last-child { font-size: 0.85rem !important; }
   .theme-toggle { width: 34px; height: 34px; }
@@ -376,6 +399,10 @@
 @media (max-width: 480px) {
   .dashboard-content { padding: 16px 12px; }
   .dash-stats-row { grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* Scoped to the dashboard on purpose — the global .card padding is shared
+     with the landing page and must not change. */
+  .dashboard-content .card { padding: 16px 14px; }
 
   /* Below this width the wordmark and the status badge no longer fit
      alongside the balance. Both are still available — the wordmark as the
