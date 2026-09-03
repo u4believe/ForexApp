@@ -91,7 +91,7 @@ export default function Overview({ user, transactions }) {
       </div>
 
       {/* Quick Actions */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px', marginBottom: '28px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: '12px', marginBottom: '28px' }}>
         <button
           className="btn btn-gold btn-full"
           onClick={() => navigate('/dashboard/deposit')}
@@ -103,7 +103,7 @@ export default function Overview({ user, transactions }) {
           className={`btn btn-full ${user?.verification_status === 'verified' ? 'btn-outline' : 'btn-ghost'}`}
           onClick={() => user?.verification_status === 'verified' && navigate('/dashboard/withdraw')}
           disabled={user?.verification_status !== 'verified'}
-          style={{ justifyContent: 'center', padding: '14px' }}
+          style={{ justifyContent: 'center', padding: '14px', whiteSpace: 'normal', textAlign: 'center' }}
         >
           ↑ Request Withdrawal
           {user?.verification_status !== 'verified' && <span style={{ fontSize: '0.75rem', marginLeft: '6px', color: 'var(--text-faint)' }}>(Verified only)</span>}
@@ -124,7 +124,7 @@ export default function Overview({ user, transactions }) {
             </button>
           </div>
         ) : (
-          <div className="table-wrap">
+          <div className="table-wrap table-stack">
             <table className="data-table">
               <thead>
                 <tr>
@@ -138,7 +138,7 @@ export default function Overview({ user, transactions }) {
               <tbody>
                 {recent.map((tx) => (
                   <tr key={`${tx.type}-${tx.id}`}>
-                    <td>
+                    <td data-label="Type">
                       <span style={{
                         display: 'inline-flex', alignItems: 'center', gap: '6px',
                         color: tx.type === 'deposit' ? 'var(--success)' : 'var(--gold-600)',
@@ -147,14 +147,14 @@ export default function Overview({ user, transactions }) {
                         {tx.type === 'deposit' ? '↓ Deposit' : '↑ Withdrawal'}
                       </span>
                     </td>
-                    <td style={{ fontSize: '0.85rem' }}>
+                    <td data-label="Asset" style={{ fontSize: '0.85rem' }}>
                       {tx.crypto}{tx.network ? ` (${tx.network})` : ''}
                     </td>
-                    <td style={{ fontWeight: 600 }}>
+                    <td data-label="Amount" style={{ fontWeight: 600 }}>
                       {tx.amount ? `$${parseFloat(tx.amount).toLocaleString('en-US', { minimumFractionDigits: 2 })}` : '—'}
                     </td>
-                    <td>{statusEl(tx.status)}</td>
-                    <td style={{ color: 'var(--text-faint)', fontSize: '0.83rem' }}>{formatDate(tx.created_at)}</td>
+                    <td data-label="Status">{statusEl(tx.status)}</td>
+                    <td data-label="Date" style={{ color: 'var(--text-faint)', fontSize: '0.83rem' }}>{formatDate(tx.created_at)}</td>
                   </tr>
                 ))}
               </tbody>

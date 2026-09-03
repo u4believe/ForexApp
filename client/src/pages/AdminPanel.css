@@ -1,0 +1,101 @@
+/* ========== ADMIN LAYOUT ========== */
+.admin-layout {
+  min-height: 100vh;
+  background: var(--page-bg);
+  display: flex;
+}
+
+.admin-sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  background: var(--section-bg);
+  border-right: 1px solid var(--border);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.admin-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.admin-tab { white-space: nowrap; }
+
+.admin-sidebar-foot { margin-top: auto; }
+
+.admin-main {
+  flex: 1;
+  min-width: 0;
+  padding: 32px;
+  overflow-y: auto;
+}
+
+/* Heading + action button. Wraps rather than squeezing the button. */
+.admin-head-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.admin-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.admin-controls-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 900px) {
+  /* Stack the shell and turn the sidebar into a scrollable tab strip. */
+  .admin-layout { flex-direction: column; }
+
+  .admin-sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 14px 16px;
+  }
+
+  .admin-brand { margin-bottom: 12px !important; }
+
+  .admin-tabs {
+    flex-direction: row;
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+  .admin-tabs::-webkit-scrollbar { display: none; }
+  .admin-tab { flex-shrink: 0; }
+
+  .admin-sidebar-foot {
+    margin-top: 12px;
+    display: flex;
+    gap: 8px;
+  }
+  .admin-sidebar-foot .btn { margin-bottom: 0 !important; }
+
+  .admin-main { padding: 20px 16px; }
+
+  .admin-controls-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+  .admin-main { padding: 16px 12px; }
+  .admin-detail-grid { grid-template-columns: 1fr; }
+  .admin-head-row h2 { font-size: 1.3rem; }
+}

@@ -239,7 +239,7 @@ export default function LegalPage() {
       {/* Top bar */}
       <div style={{
         background: 'var(--section-bg)', borderBottom: '1px solid var(--border)',
-        padding: '16px 32px', display: 'flex', alignItems: 'center', gap: '12px',
+        padding: '16px clamp(16px, 4vw, 32px)', display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap',
       }}>
         <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', color: 'var(--gold-500)', fontSize: '0.85rem', fontWeight: 600 }}>
           ← Back to Home
@@ -249,7 +249,7 @@ export default function LegalPage() {
       </div>
 
       {/* Content */}
-      <div style={{ maxWidth: '780px', margin: '0 auto', padding: '48px 32px 80px' }}>
+      <div style={{ maxWidth: '780px', margin: '0 auto', padding: 'clamp(28px, 6vw, 48px) clamp(16px, 4vw, 32px) 80px' }}>
         <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: '2rem', marginBottom: '8px' }}>
           {doc.title}
         </h1>

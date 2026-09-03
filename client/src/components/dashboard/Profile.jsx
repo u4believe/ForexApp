@@ -88,13 +88,13 @@ export default function Profile() {
       <h1 className="dash-page-title">My Profile</h1>
       <p className="dash-page-sub">Your account information and verification status</p>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+      <div className="dash-grid-2">
         {/* Profile Info */}
         <div>
           <div className="card" style={{ marginBottom: '20px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px', flexWrap: 'wrap' }}>
               <div style={{
-                width: '60px', height: '60px', borderRadius: '50%',
+                width: '60px', height: '60px', borderRadius: '50%', flexShrink: 0,
                 background: 'var(--gold-gradient)', color: '#060D18',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontSize: '1.5rem', fontWeight: 700,
@@ -112,7 +112,7 @@ export default function Profile() {
               {fields.map((f) => (
                 <div key={f.label} style={{ borderBottom: '1px solid var(--border-light)', paddingBottom: '14px' }}>
                   <div style={{ fontSize: '0.75rem', color: 'var(--text-faint)', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{f.label}</div>
-                  <div style={{ fontSize: '0.92rem', color: 'var(--text-secondary)', lineHeight: '1.5' }}>{f.value}</div>
+                  <div style={{ fontSize: '0.92rem', color: 'var(--text-secondary)', lineHeight: '1.5', overflowWrap: 'anywhere' }}>{f.value}</div>
                 </div>
               ))}
             </div>
@@ -170,14 +170,14 @@ export default function Profile() {
               Account Security
             </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0', borderBottom: '1px solid var(--border-light)' }}>
-                <div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px', flexWrap: 'wrap', padding: '12px 0', borderBottom: '1px solid var(--border-light)' }}>
+                <div style={{ minWidth: 0 }}>
                   <div style={{ fontSize: '0.88rem', fontWeight: 500 }}>Email Verification</div>
-                  <div style={{ fontSize: '0.76rem', color: 'var(--text-faint)' }}>{user?.email}</div>
+                  <div style={{ fontSize: '0.76rem', color: 'var(--text-faint)', overflowWrap: 'anywhere' }}>{user?.email}</div>
                 </div>
                 <span className="badge badge-verified">✓ Verified</span>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px', flexWrap: 'wrap', padding: '12px 0' }}>
                 <div>
                   <div style={{ fontSize: '0.88rem', fontWeight: 500 }}>KYC Documents</div>
                   <div style={{ fontSize: '0.76rem', color: 'var(--text-faint)' }}>Identity documentation</div>
@@ -201,7 +201,7 @@ export default function Profile() {
 
       {/* Next of Kin — full width */}
       <div className="card" style={{ marginTop: '24px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
+        <div className="dash-section-head" style={{ marginBottom: '20px' }}>
           <div>
             <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.1rem', marginBottom: '4px' }}>
               Next of Kin
@@ -229,7 +229,7 @@ export default function Profile() {
 
         {!editingNok ? (
           hasNok ? (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }}>
+            <div className="dash-grid-3">
               {[
                 { label: 'Full Name', value: user.nok_name },
                 { label: 'Phone Number', value: user.nok_phone || '—' },
@@ -237,7 +237,7 @@ export default function Profile() {
               ].map((f) => (
                 <div key={f.label}>
                   <div style={{ fontSize: '0.75rem', color: 'var(--text-faint)', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{f.label}</div>
-                  <div style={{ fontSize: '0.92rem', color: 'var(--text-secondary)' }}>{f.value}</div>
+                  <div style={{ fontSize: '0.92rem', color: 'var(--text-secondary)', overflowWrap: 'anywhere' }}>{f.value}</div>
                 </div>
               ))}
             </div>
@@ -253,7 +253,7 @@ export default function Profile() {
                 ⚠ {nokError}
               </div>
             )}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '20px' }}>
+            <div className="dash-grid-3" style={{ marginBottom: '20px' }}>
               <div className="form-group" style={{ margin: 0 }}>
                 <label className="form-label">
                   Full Name <span style={{ color: 'var(--gold-600)' }}>*</span>
@@ -294,7 +294,7 @@ export default function Profile() {
             <p style={{ fontSize: '0.78rem', color: 'var(--text-faint)', marginBottom: '20px' }}>
               * Name is required. At least one contact method (phone or email) must be provided.
             </p>
-            <div style={{ display: 'flex', gap: '12px' }}>
+            <div className="dash-action-row">
               <button type="submit" className="btn btn-gold" disabled={nokLoading}>
                 {nokLoading ? <><span className="spinner" /> Saving…</> : 'Save Next of Kin'}
               </button>
@@ -308,7 +308,7 @@ export default function Profile() {
 
       {/* Danger Zone — full width */}
       <div className="card" style={{ marginTop: '24px', borderColor: 'var(--danger-border, rgba(220,53,69,0.35))' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <div className="dash-section-head">
           <div>
             <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.1rem', marginBottom: '4px', color: 'var(--danger, #dc3545)' }}>
               Danger Zone
@@ -338,14 +338,14 @@ export default function Profile() {
                 ⚠ {deleteError}
               </div>
             )}
-            <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+            <div className="dash-action-row">
               <input
                 type="text"
                 className="form-input"
                 placeholder="Type DELETE to confirm"
                 value={deleteInput}
                 onChange={(e) => { setDeleteInput(e.target.value); setDeleteError(''); }}
-                style={{ maxWidth: '220px', margin: 0 }}
+                style={{ maxWidth: '220px', margin: 0, flex: '1 1 180px' }}
                 autoComplete="off"
               />
               <button

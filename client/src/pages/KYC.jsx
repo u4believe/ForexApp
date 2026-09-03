@@ -74,7 +74,7 @@ export default function KYC() {
     <div style={{
       minHeight: '100vh', background: 'var(--page-bg)',
       display: 'flex', flexDirection: 'column', alignItems: 'center',
-      justifyContent: 'center', padding: 24,
+      justifyContent: 'center', padding: 'clamp(16px, 4vw, 24px)',
     }}>
       <div style={{ textAlign: 'center', marginBottom: 28 }}>
         <div style={{ fontSize: '0.68rem', color: 'var(--gold-600)', letterSpacing: '0.16em', fontWeight: 700, marginBottom: 8 }}>
@@ -90,7 +90,7 @@ export default function KYC() {
       </div>
 
       {/* Progress steps */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 28 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: 10, marginBottom: 28 }}>
         {[
           { n: 1, label: 'Personal Details' },
           { n: 2, label: 'Address & ID' },
@@ -105,7 +105,7 @@ export default function KYC() {
               </span>
             </div>
             {i === 0 && (
-              <div style={{ width: 48, height: 1, background: step > 1 ? 'var(--gold-500)' : 'var(--border)' }} />
+              <div style={{ width: 'clamp(16px, 6vw, 48px)', height: 1, flexShrink: 0, background: step > 1 ? 'var(--gold-500)' : 'var(--border)' }} />
             )}
           </div>
         ))}
@@ -113,7 +113,7 @@ export default function KYC() {
 
       <div style={{
         background: 'var(--section-bg)', border: '1px solid var(--border)',
-        borderRadius: 'var(--radius-lg)', padding: '32px 28px',
+        borderRadius: 'var(--radius-lg)', padding: 'clamp(22px, 5vw, 32px) clamp(18px, 4.5vw, 28px)',
         width: '100%', maxWidth: 500, boxShadow: 'var(--shadow)',
       }}>
         {error && <div className="alert alert-error" style={{ marginBottom: 18 }}>{error}</div>}
@@ -226,7 +226,7 @@ export default function KYC() {
               </div>
             </div>
 
-            <div style={{ display: 'flex', gap: 10, marginTop: 24 }}>
+            <div style={{ display: 'flex', gap: 10, marginTop: 24, flexWrap: 'wrap' }}>
               <button type="button" className="btn btn-ghost btn-sm" onClick={() => setStep(1)}>
                 ← Back
               </button>

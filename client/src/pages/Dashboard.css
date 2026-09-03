@@ -268,11 +268,66 @@
 .dash-stat-value.success { color: var(--success); }
 .dash-stat-sub { font-size: 0.72rem; color: var(--text-faint); margin-top: 4px; }
 
+/* ========== DASHBOARD GRID UTILITIES ========== */
+/* Two-column page layouts (Deposit, Profile). Collapse to one column on tablet. */
+.dash-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+/* Three-column field rows (Next of Kin). */
+.dash-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* Header row with a title on the left and an action button on the right. */
+.dash-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* Row of buttons/inputs that should stack rather than overflow. */
+.dash-action-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Banner: icon + copy, wraps on narrow screens. */
+.dash-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* Long values (balances, emails, addresses) must never push the layout wider. */
+.dash-stat-value,
+.dash-stat-sub,
+.dash-page-title,
+.dash-page-sub {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
 /* ========== RESPONSIVE ========== */
+@media (max-width: 1024px) {
+  .dashboard-content { padding: 28px 24px; }
+  .dash-stats-row { gap: 12px; }
+}
+
 @media (max-width: 900px) {
   .sidebar {
     position: fixed;
     left: 0; top: 0;
+    width: min(280px, 84vw);
     transform: translateX(-100%);
     height: 100%;
     z-index: 300;
@@ -282,11 +337,56 @@
   .sidebar-overlay { display: block; }
   .topbar-menu-btn { display: flex; }
   .topbar-logo { display: flex; }
+
+  .dashboard-topbar { padding: 10px 16px; gap: 10px; }
+  .topbar-right { gap: 10px; }
+
   .dashboard-content { padding: 20px 16px; }
   .dash-stats-row { grid-template-columns: repeat(2, 1fr); }
+
+  .dash-grid-2 { grid-template-columns: 1fr; gap: 20px; }
+}
+
+@media (max-width: 700px) {
+  .dash-grid-3 { grid-template-columns: 1fr 1fr; gap: 16px; }
+}
+
+@media (max-width: 600px) {
+  .dashboard-topbar { padding: 10px 12px; gap: 8px; min-height: 54px; }
+  .topbar-right { gap: 8px; }
+  .topbar-balance { padding: 5px 9px; }
+  .topbar-balance span { font-size: 0.72rem !important; }
+  .topbar-balance span:last-child { font-size: 0.85rem !important; }
+  .theme-toggle { width: 34px; height: 34px; }
+
+  .dash-page-title { font-size: 1.28rem; }
+  .dash-page-sub { font-size: 0.82rem; margin-bottom: 20px; }
+
+  .dash-stat-card { padding: 14px 15px; }
+  .dash-stat-label { font-size: 0.66rem; letter-spacing: 0.06em; margin-bottom: 7px; }
+  .dash-stat-value { font-size: 1.12rem; }
+  .dash-stat-sub { font-size: 0.68rem; }
+
+  .dash-grid-3 { grid-template-columns: 1fr; gap: 14px; }
+  .dash-action-row { gap: 10px; }
+  .dash-action-row > .btn,
+  .dash-action-row > .form-input { width: 100%; max-width: none !important; }
 }
 
 @media (max-width: 480px) {
   .dashboard-content { padding: 16px 12px; }
-  .dash-stats-row { grid-template-columns: 1fr 1fr; }
+  .dash-stats-row { grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* Below this width the wordmark and the status badge no longer fit
+     alongside the balance. Both are still available — the wordmark as the
+     home link's diamond, the status in the sidebar and on the Overview. */
+  .topbar-logo span:last-child { display: none; }
+  .dashboard-topbar > .topbar-right > .badge { display: none; }
+}
+
+@media (max-width: 380px) {
+  /* Below this width two stat cards can no longer show a full currency
+     value without clipping, so give each card the full row. */
+  .dash-stats-row { grid-template-columns: 1fr; }
+  .dash-stat-value { font-size: 1.25rem; }
 }

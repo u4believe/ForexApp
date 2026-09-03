@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
+import './AdminPanel.css';
 
 export default function AdminPanel() {
   const { logout } = useAuth();
@@ -100,17 +101,15 @@ export default function AdminPanel() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--page-bg)', display: 'flex' }}>
+    <div className="admin-layout">
       {/* Sidebar */}
-      <aside style={{
-        width: '220px', background: 'var(--section-bg)', borderRight: '1px solid var(--border)',
-        padding: '24px 16px', display: 'flex', flexDirection: 'column', gap: '6px', flexShrink: 0,
-      }}>
-        <div style={{ padding: '0 4px', marginBottom: '20px' }}>
+      <aside className="admin-sidebar">
+        <div className="admin-brand" style={{ padding: '0 4px', marginBottom: '20px' }}>
           <div style={{ fontSize: '0.7rem', color: 'var(--gold-500)', letterSpacing: '0.15em', marginBottom: '4px' }}>◆ ADMIN PANEL</div>
           <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.1rem' }}>CapitalPip</div>
         </div>
 
+        <div className="admin-tabs">
         {[
           { key: 'users', label: '👥 Users' },
           { key: 'investments', label: '📈 Investments' },
@@ -119,6 +118,7 @@ export default function AdminPanel() {
           <button
             key={t.key}
             onClick={() => setTab(t.key)}
+            className="admin-tab"
             style={{
               background: tab === t.key ? 'rgba(201,168,76,0.12)' : 'none',
               border: tab === t.key ? '1px solid rgba(201,168,76,0.2)' : '1px solid transparent',
@@ -130,8 +130,9 @@ export default function AdminPanel() {
             {t.label}
           </button>
         ))}
+        </div>
 
-        <div style={{ marginTop: 'auto' }}>
+        <div className="admin-sidebar-foot">
           <button
             className="btn btn-ghost btn-sm btn-full"
             onClick={() => navigate('/dashboard')}
@@ -149,16 +150,16 @@ export default function AdminPanel() {
       </aside>
 
       {/* Main */}
-      <div style={{ flex: 1, padding: '32px', overflowY: 'auto' }}>
+      <div className="admin-main">
         {msg && (
-          <div className="alert alert-success" style={{ marginBottom: '20px', position: 'fixed', top: '20px', right: '20px', zIndex: 999, maxWidth: '300px' }}>
+          <div className="alert alert-success" style={{ marginBottom: '20px', position: 'fixed', top: '20px', right: '20px', zIndex: 999, maxWidth: 'min(300px, calc(100vw - 40px))' }}>
             ✓ {msg}
           </div>
         )}
 
         {tab === 'investments' && (
           <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+            <div className="admin-head-row">
               <h2 style={{ fontFamily: "'Playfair Display', serif" }}>Pending Investment Requests</h2>
               <button className="btn btn-ghost btn-sm" onClick={fetchInvestments}>↻ Refresh</button>
             </div>
@@ -170,7 +171,7 @@ export default function AdminPanel() {
                 <p>No pending investment requests.</p>
               </div>
             ) : (
-              <div className="table-wrap">
+              <div className="table-wrap table-stack">
                 <table className="data-table">
                   <thead>
                     <tr>
@@ -187,15 +188,15 @@ export default function AdminPanel() {
                   <tbody>
                     {investments.map(inv => (
                       <tr key={inv.id}>
-                        <td style={{ fontWeight: 600 }}>{inv.user_name}</td>
-                        <td style={{ fontSize: '0.83rem' }}>{inv.user_email}</td>
-                        <td><span style={{ fontWeight: 600, color: 'var(--gold-600)' }}>{inv.plan_name}</span></td>
-                        <td>${parseFloat(inv.amount).toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
-                        <td>{inv.roi_min}%–{inv.roi_max}%</td>
-                        <td>{inv.profit_fee}%</td>
-                        <td style={{ fontSize: '0.8rem', color: 'var(--text-faint)' }}>{formatDate(inv.created_at)}</td>
-                        <td>
-                          <div style={{ display: 'flex', gap: '6px' }}>
+                        <td data-label="User" style={{ fontWeight: 600 }}>{inv.user_name}</td>
+                        <td data-label="Email" style={{ fontSize: '0.83rem' }}>{inv.user_email}</td>
+                        <td data-label="Plan"><span style={{ fontWeight: 600, color: 'var(--gold-600)' }}>{inv.plan_name}</span></td>
+                        <td data-label="Amount">${parseFloat(inv.amount).toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                        <td data-label="ROI">{inv.roi_min}%–{inv.roi_max}%</td>
+                        <td data-label="Fee">{inv.profit_fee}%</td>
+                        <td data-label="Requested" style={{ fontSize: '0.8rem', color: 'var(--text-faint)' }}>{formatDate(inv.created_at)}</td>
+                        <td data-label="Actions">
+                          <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
                             <button
                               className="btn btn-sm"
                               style={{ background: 'var(--success-bg)', color: 'var(--success)', border: '1px solid var(--success-border)', fontSize: '0.75rem' }}
@@ -230,7 +231,7 @@ export default function AdminPanel() {
         {tab === 'stats' && (
           <div>
             <h2 style={{ fontFamily: "'Playfair Display', serif", marginBottom: '24px' }}>Platform Statistics</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(180px, 100%), 1fr))', gap: '16px' }}>
               {[
                 { label: 'Total Users', value: stats.totalUsers || 0, color: 'var(--gold-600)' },
                 { label: 'Pending KYC', value: stats.pendingKyc || 0, color: 'var(--warning)' },
@@ -249,21 +250,21 @@ export default function AdminPanel() {
 
         {tab === 'users' && (
           <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+            <div className="admin-head-row">
               <h2 style={{ fontFamily: "'Playfair Display', serif" }}>User Management</h2>
               <button className="btn btn-ghost btn-sm" onClick={fetchData}>↻ Refresh</button>
             </div>
 
             {selectedUser && (
               <div className="card" style={{ marginBottom: '24px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
-                  <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.1rem' }}>
+                <div className="admin-head-row" style={{ alignItems: 'flex-start' }}>
+                  <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.1rem', overflowWrap: 'anywhere' }}>
                     User Detail: {selectedUser.user.full_name || selectedUser.user.email}
                   </h3>
                   <button className="btn btn-ghost btn-sm" onClick={() => setSelectedUser(null)}>× Close</button>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '20px' }}>
+                <div className="admin-detail-grid">
                   {[
                     ['Email', selectedUser.user.email],
                     ['Full Name', selectedUser.user.full_name || '—'],
@@ -335,7 +336,7 @@ export default function AdminPanel() {
                   )}
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
+                <div className="admin-controls-grid">
                   <div>
                     <div style={{ fontSize: '0.78rem', color: 'var(--text-faint)', marginBottom: '10px' }}>Verification Status</div>
                     <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
@@ -354,13 +355,13 @@ export default function AdminPanel() {
                     <div style={{ fontSize: '0.78rem', color: 'var(--text-faint)', marginBottom: '10px' }}>
                       Account Balance — current: <strong style={{ color: 'var(--gold-600)' }}>${(selectedUser.user.balance || 0).toFixed(2)}</strong>
                     </div>
-                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                    <div className="dash-action-row" style={{ gap: '8px' }}>
                       <input
                         type="number"
                         min="0"
                         step="0.01"
                         className="form-input"
-                        style={{ maxWidth: '160px' }}
+                        style={{ maxWidth: '160px', flex: '1 1 120px' }}
                         placeholder="New balance"
                         value={balanceEdit.userId === selectedUser.user.id ? balanceEdit.value : ''}
                         onChange={e => setBalanceEdit({ userId: selectedUser.user.id, value: e.target.value })}
@@ -379,10 +380,10 @@ export default function AdminPanel() {
                 {/* Assign Plan */}
                 <div style={{ marginBottom: '20px' }}>
                   <div style={{ fontSize: '0.78rem', color: 'var(--text-faint)', marginBottom: '10px' }}>Assign Investment Plan</div>
-                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+                  <div className="dash-action-row" style={{ gap: '8px' }}>
                     <select
                       className="form-input"
-                      style={{ maxWidth: '180px' }}
+                      style={{ maxWidth: '180px', flex: '1 1 140px' }}
                       value={assignPlan}
                       onChange={e => setAssignPlan(e.target.value)}
                     >
@@ -414,18 +415,18 @@ export default function AdminPanel() {
                 {selectedUser.deposits?.length > 0 && (
                   <div style={{ marginBottom: '16px' }}>
                     <div style={{ fontSize: '0.88rem', fontWeight: 600, marginBottom: '10px' }}>Deposits ({selectedUser.deposits.length})</div>
-                    <div className="table-wrap">
+                    <div className="table-wrap table-stack">
                       <table className="data-table">
                         <thead><tr><th>Crypto</th><th>Network</th><th>Amount</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
                         <tbody>
                           {selectedUser.deposits.map(d => (
                             <tr key={d.id}>
-                              <td>{d.crypto}</td>
-                              <td>{d.network || '—'}</td>
-                              <td>{d.amount ? `$${d.amount.toFixed(2)}` : '—'}</td>
-                              <td>{statusBadge(d.status)}</td>
-                              <td style={{ fontSize: '0.8rem', color: 'var(--text-faint)' }}>{formatDate(d.created_at)}</td>
-                              <td>
+                              <td data-label="Crypto">{d.crypto}</td>
+                              <td data-label="Network">{d.network || '—'}</td>
+                              <td data-label="Amount">{d.amount ? `$${d.amount.toFixed(2)}` : '—'}</td>
+                              <td data-label="Status">{statusBadge(d.status)}</td>
+                              <td data-label="Date" style={{ fontSize: '0.8rem', color: 'var(--text-faint)' }}>{formatDate(d.created_at)}</td>
+                              <td data-label="Actions">
                                 {d.status === 'pending' && (
                                   <button
                                     className="btn btn-sm"
@@ -452,20 +453,20 @@ export default function AdminPanel() {
                 {selectedUser.withdrawals?.length > 0 && (
                   <div>
                     <div style={{ fontSize: '0.88rem', fontWeight: 600, marginBottom: '10px' }}>Withdrawals ({selectedUser.withdrawals.length})</div>
-                    <div className="table-wrap">
+                    <div className="table-wrap table-stack">
                       <table className="data-table">
                         <thead><tr><th>Amount</th><th>Crypto</th><th>Wallet</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
                         <tbody>
                           {selectedUser.withdrawals.map(w => (
                             <tr key={w.id}>
-                              <td>${w.amount.toFixed(2)}</td>
-                              <td>{w.crypto}</td>
-                              <td style={{ fontSize: '0.75rem', fontFamily: 'monospace', maxWidth: '160px', overflow: 'hidden', textOverflow: 'ellipsis' }}>{w.wallet_address}</td>
-                              <td>{statusBadge(w.status)}</td>
-                              <td style={{ fontSize: '0.8rem', color: 'var(--text-faint)' }}>{formatDate(w.created_at)}</td>
-                              <td>
+                              <td data-label="Amount">${w.amount.toFixed(2)}</td>
+                              <td data-label="Crypto">{w.crypto}</td>
+                              <td data-label="Wallet" style={{ fontSize: '0.75rem', fontFamily: 'monospace', maxWidth: '160px', overflow: 'hidden', textOverflow: 'ellipsis' }}>{w.wallet_address}</td>
+                              <td data-label="Status">{statusBadge(w.status)}</td>
+                              <td data-label="Date" style={{ fontSize: '0.8rem', color: 'var(--text-faint)' }}>{formatDate(w.created_at)}</td>
+                              <td data-label="Actions">
                                 {w.status === 'pending' && (
-                                  <div style={{ display: 'flex', gap: '6px' }}>
+                                  <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
                                     <button
                                       className="btn btn-sm"
                                       style={{ background: 'var(--success-bg)', color: 'var(--success)', border: '1px solid var(--success-border)', fontSize: '0.72rem' }}
@@ -498,7 +499,7 @@ export default function AdminPanel() {
             {loading ? (
               <div style={{ textAlign: 'center', padding: '48px' }}><span className="spinner" style={{ width: '32px', height: '32px' }} /></div>
             ) : (
-              <div className="table-wrap">
+              <div className="table-wrap table-stack">
                 <table className="data-table">
                   <thead>
                     <tr>
@@ -516,13 +517,13 @@ export default function AdminPanel() {
                       <tr><td colSpan={7} style={{ textAlign: 'center', color: 'var(--text-faint)', padding: '32px' }}>No users yet</td></tr>
                     ) : users.map(u => (
                       <tr key={u.id}>
-                        <td style={{ fontWeight: 600 }}>{u.full_name || '—'}</td>
-                        <td style={{ fontSize: '0.85rem' }}>{u.email}</td>
-                        <td>{u.kyc_submitted ? <span className="badge badge-verified">✓ Submitted</span> : <span className="badge badge-unverified">Pending</span>}</td>
-                        <td>{statusBadge(u.verification_status)}</td>
-                        <td>
+                        <td data-label="User" style={{ fontWeight: 600 }}>{u.full_name || '—'}</td>
+                        <td data-label="Email" style={{ fontSize: '0.85rem' }}>{u.email}</td>
+                        <td data-label="KYC">{u.kyc_submitted ? <span className="badge badge-verified">✓ Submitted</span> : <span className="badge badge-unverified">Pending</span>}</td>
+                        <td data-label="Status">{statusBadge(u.verification_status)}</td>
+                        <td data-label="Balance">
                           {balanceEdit.userId === u.id ? (
-                            <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                            <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
                               <input
                                 type="number" min="0" step="0.01"
                                 className="form-input"
@@ -544,9 +545,9 @@ export default function AdminPanel() {
                             </span>
                           )}
                         </td>
-                        <td style={{ color: 'var(--text-faint)', fontSize: '0.82rem' }}>{formatDate(u.created_at)}</td>
-                        <td>
-                          <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                        <td data-label="Joined" style={{ color: 'var(--text-faint)', fontSize: '0.82rem' }}>{formatDate(u.created_at)}</td>
+                        <td data-label="Actions">
+                          <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
                             <button
                               className="btn btn-ghost btn-sm"
                               onClick={() => { viewUser(u.id); window.scrollTo({ top: 0, behavior: 'smooth' }); }}

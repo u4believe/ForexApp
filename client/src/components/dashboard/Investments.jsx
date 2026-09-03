@@ -51,7 +51,7 @@ export default function Investments({ transactions, refreshTransactions }) {
             marginBottom: '24px',
             borderColor: currentInv.status === 'active' ? 'var(--success-border)' : 'rgba(201,168,76,0.4)',
             background: currentInv.status === 'active' ? 'var(--success-bg)' : 'rgba(201,168,76,0.06)',
-            display: 'flex', alignItems: 'center', gap: '16px',
+            display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap',
           }}
         >
           <div style={{ fontSize: '2rem' }}>{currentInv.status === 'active' ? '✅' : '⏳'}</div>
@@ -78,7 +78,7 @@ export default function Investments({ transactions, refreshTransactions }) {
       )}
 
       {/* Plan cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px', marginBottom: '32px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))', gap: '16px', marginBottom: '32px' }}>
         {PLANS.map((plan) => {
           const eligible = balance >= plan.min;
           const isActive = currentInv?.plan_name === plan.name && currentInv?.status === 'active';
@@ -175,7 +175,7 @@ export default function Investments({ transactions, refreshTransactions }) {
             <p>No investments yet. Select a plan above to get started.</p>
           </div>
         ) : (
-          <div className="table-wrap">
+          <div className="table-wrap table-stack">
             <table className="data-table">
               <thead>
                 <tr>
@@ -190,11 +190,11 @@ export default function Investments({ transactions, refreshTransactions }) {
               <tbody>
                 {investments.map((inv) => (
                   <tr key={inv.id}>
-                    <td style={{ fontWeight: 600 }}>{inv.plan_name}</td>
-                    <td>${fmt(parseFloat(inv.amount))}</td>
-                    <td>{inv.roi_min}% – {inv.roi_max}%</td>
-                    <td>{inv.profit_fee}%</td>
-                    <td>
+                    <td data-label="Plan" style={{ fontWeight: 600 }}>{inv.plan_name}</td>
+                    <td data-label="Amount">${fmt(parseFloat(inv.amount))}</td>
+                    <td data-label="ROI Range">{inv.roi_min}% – {inv.roi_max}%</td>
+                    <td data-label="Profit Fee">{inv.profit_fee}%</td>
+                    <td data-label="Status">
                       <span className={`badge ${
                         inv.status === 'active'    ? 'badge-verified'   :
                         inv.status === 'pending'   ? 'badge-pending'    :
@@ -204,7 +204,7 @@ export default function Investments({ transactions, refreshTransactions }) {
                         {inv.status}
                       </span>
                     </td>
-                    <td style={{ color: 'var(--text-faint)', fontSize: '0.83rem' }}>{fmtDate(inv.created_at)}</td>
+                    <td data-label="Date" style={{ color: 'var(--text-faint)', fontSize: '0.83rem' }}>{fmtDate(inv.created_at)}</td>
                   </tr>
                 ))}
               </tbody>

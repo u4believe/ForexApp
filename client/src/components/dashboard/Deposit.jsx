@@ -69,7 +69,7 @@ export default function Deposit() {
         </div>
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+      <div className="dash-grid-2">
         {/* Left: Select currency & address */}
         <div>
           <div className="card" style={{ marginBottom: '20px' }}>

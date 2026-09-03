@@ -18,7 +18,8 @@ export default function Withdraw({ user }) {
         <p className="dash-page-sub">Request a withdrawal to your crypto wallet</p>
         <div style={{
           background: 'var(--section-bg)', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)',
-          padding: '60px 40px', maxWidth: '480px', margin: '0 auto', textAlign: 'center',
+          padding: 'clamp(32px, 8vw, 60px) clamp(20px, 6vw, 40px)',
+          maxWidth: '480px', margin: '0 auto', textAlign: 'center',
         }}>
           <div style={{ fontSize: '3rem', marginBottom: '16px' }}>🔒</div>
           <h2 style={{ fontFamily: "'Playfair Display', serif", marginBottom: '12px' }}>
@@ -70,9 +71,9 @@ export default function Withdraw({ user }) {
         <div style={{
           background: 'var(--success-bg)', border: '1px solid var(--success-border)',
           borderRadius: 'var(--radius-sm)', padding: '12px 16px', marginBottom: '24px',
-          display: 'flex', alignItems: 'center', gap: '10px',
+          display: 'flex', alignItems: 'flex-start', gap: '10px',
         }}>
-          <span style={{ color: 'var(--success)' }}>✓</span>
+          <span style={{ color: 'var(--success)', flexShrink: 0 }}>✓</span>
           <span style={{ fontSize: '0.85rem', color: 'var(--success)' }}>
             <strong>Verified Account</strong> — Withdrawals are enabled on your account.
           </span>
