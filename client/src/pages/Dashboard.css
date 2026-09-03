@@ -8,7 +8,6 @@
 /* ========== SIDEBAR ========== */
 .sidebar {
   width: 256px;
-  min-height: 100vh;
   background: var(--section-bg);
   border-right: 1px solid var(--border);
   display: flex;
@@ -16,19 +15,33 @@
   position: sticky;
   top: 0;
   height: 100vh;
-  overflow-y: auto;
+  height: 100dvh;
+  overflow: hidden;
   flex-shrink: 0;
   transition: transform 0.3s ease;
   z-index: 200;
   box-shadow: var(--shadow-sm);
 }
 
+/* The only part that scrolls. Keeping it a separate region means the header
+   and the Sign Out footer stay on screen no matter how short the viewport
+   is or how many nav items there are. */
+.sidebar-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
 .sidebar-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
   padding: 20px 20px 0;
+  flex-shrink: 0;
 }
+.sidebar-header .nav-logo { min-width: 0; overflow-wrap: anywhere; }
 
 .sidebar-close {
   display: none;
@@ -75,16 +88,12 @@
   font-weight: 700;
   font-size: 0.88rem;
   color: var(--text-primary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
 }
 .sidebar-user-email {
   font-size: 0.73rem;
   color: var(--text-faint);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
   margin-bottom: 4px;
 }
 
@@ -144,8 +153,11 @@
 .sidebar-notice-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
 
 .sidebar-signout {
-  margin-top: auto;
+  flex-shrink: 0;
   padding: 16px;
+  border-top: 1px solid var(--border-light);
+  background: var(--section-bg);
+  padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
 }
 
 .sidebar-overlay {
@@ -179,8 +191,9 @@
   padding: 12px 24px;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  gap: 14px;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 10px 14px;
   min-height: 58px;
   box-shadow: var(--shadow-xs);
 }
@@ -194,7 +207,7 @@
   border-radius: var(--radius-sm);
   cursor: pointer;
   padding: 8px;
-  margin-right: auto;
+  flex-shrink: 0;
   transition: all var(--transition);
 }
 .topbar-menu-btn:hover { background: var(--border); }
@@ -209,20 +222,26 @@
   display: none;
   align-items: center;
   gap: 8px;
-  margin-right: auto;
   font-family: 'Playfair Display', serif;
-  font-size: 1rem;
+  font-size: clamp(0.86rem, 3.4vw, 1rem);
   color: var(--text-primary);
   font-weight: 700;
+  min-width: 0;
 }
 
 .topbar-right {
   display: flex;
   align-items: center;
-  gap: 14px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px 12px;
+  margin-left: auto;
   min-width: 0;
 }
-.topbar-right > .badge { white-space: nowrap; flex-shrink: 0; }
+.topbar-right > .badge {
+  white-space: nowrap;
+  font-size: clamp(0.66rem, 2.6vw, 0.75rem);
+}
 
 .topbar-balance {
   display: flex;
@@ -238,7 +257,7 @@
 .dashboard-content { padding: 32px; flex: 1; min-width: 0; max-width: 100%; }
 
 .dash-page-title {
-  font-size: 1.5rem;
+  font-size: clamp(1.15rem, 4.6vw, 1.5rem);
   font-family: 'Playfair Display', serif;
   margin-bottom: 4px;
   color: var(--text-primary);
@@ -260,7 +279,7 @@
   box-shadow: var(--shadow-xs);
 }
 .dash-stat-label {
-  font-size: 0.72rem;
+  font-size: clamp(0.62rem, 2.4vw, 0.72rem);
   color: var(--text-faint);
   text-transform: uppercase;
   letter-spacing: 0.09em;
@@ -268,7 +287,7 @@
   margin-bottom: 9px;
 }
 .dash-stat-value {
-  font-size: 1.4rem;
+  font-size: clamp(0.95rem, 4vw, 1.4rem);
   font-weight: 700;
   font-family: 'Playfair Display', serif;
   color: var(--text-primary);
@@ -329,25 +348,9 @@
   .sidebar {
     position: fixed;
     left: 0; top: 0;
-    width: min(280px, 84vw);
+    width: min(290px, 86vw);
     transform: translateX(-100%);
-    min-height: 0;
-    height: 100%;
-    height: 100dvh;
-    max-height: 100%;
-    max-height: 100dvh;
-    overflow-y: auto;
-    overscroll-behavior: contain;
     z-index: 300;
-  }
-  /* Pin Sign Out to the bottom of the drawer so it is always reachable,
-     and keep it clear of the home indicator / browser chrome. */
-  .sidebar-signout {
-    position: sticky;
-    bottom: 0;
-    background: var(--section-bg);
-    border-top: 1px solid var(--border-light);
-    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
   }
   .sidebar.sidebar-open { transform: translateX(0); }
   .sidebar-close { display: flex; }
@@ -362,11 +365,6 @@
   .dash-stats-row { grid-template-columns: repeat(2, 1fr); }
 
   .dash-grid-2 { grid-template-columns: 1fr; gap: 20px; }
-
-  /* Once the columns stack, this sits between the Account Security and
-     Next of Kin cards, interrupting the page. The drawer pins its own
-     Sign Out on mobile, so drop the duplicate. */
-  .profile-signout { display: none; }
 }
 
 @media (max-width: 700px) {
@@ -377,17 +375,14 @@
   .dashboard-topbar { padding: 10px 12px; gap: 8px; min-height: 54px; }
   .topbar-right { gap: 8px; }
   .topbar-balance { padding: 5px 9px; }
-  .topbar-balance span { white-space: nowrap; }
-  .topbar-balance span { font-size: 0.72rem !important; }
+  .topbar-balance span { white-space: nowrap; font-size: 0.72rem !important; }
   .topbar-balance span:last-child { font-size: 0.85rem !important; }
   .theme-toggle { width: 34px; height: 34px; }
 
-  .dash-page-title { font-size: 1.28rem; }
   .dash-page-sub { font-size: 0.82rem; margin-bottom: 20px; }
 
   .dash-stat-card { padding: 14px 15px; }
-  .dash-stat-label { font-size: 0.66rem; letter-spacing: 0.06em; margin-bottom: 7px; }
-  .dash-stat-value { font-size: 1.12rem; }
+  .dash-stat-label { letter-spacing: 0.06em; margin-bottom: 7px; }
   .dash-stat-sub { font-size: 0.68rem; }
 
   .dash-grid-3 { grid-template-columns: 1fr; gap: 14px; }
@@ -403,17 +398,5 @@
   /* Scoped to the dashboard on purpose — the global .card padding is shared
      with the landing page and must not change. */
   .dashboard-content .card { padding: 16px 14px; }
-
-  /* Below this width the wordmark and the status badge no longer fit
-     alongside the balance. Both are still available — the wordmark as the
-     home link's diamond, the status in the sidebar and on the Overview. */
-  .topbar-logo span:last-child { display: none; }
-  .dashboard-topbar > .topbar-right > .badge { display: none; }
 }
 
-@media (max-width: 380px) {
-  /* Below this width two stat cards can no longer show a full currency
-     value without clipping, so give each card the full row. */
-  .dash-stats-row { grid-template-columns: 1fr; }
-  .dash-stat-value { font-size: 1.25rem; }
-}

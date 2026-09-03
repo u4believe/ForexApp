@@ -85,6 +85,7 @@ export default function Dashboard() {
           <button className="sidebar-close" onClick={() => setSidebarOpen(false)}>×</button>
         </div>
 
+        <div className="sidebar-scroll">
         <div className="sidebar-user">
           <div className="sidebar-avatar">{(user?.full_name || user?.email || '?')[0].toUpperCase()}</div>
           <div className="sidebar-user-info">
@@ -137,6 +138,7 @@ export default function Dashboard() {
             </div>
           </div>
         )}
+        </div>
 
         <div className="sidebar-signout">
           <button className="btn btn-ghost btn-full btn-sm" onClick={handleLogout} style={{ justifyContent: 'flex-start' }}>

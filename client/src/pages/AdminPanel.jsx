@@ -462,7 +462,7 @@ export default function AdminPanel() {
                             <tr key={w.id}>
                               <td data-label="Amount">${w.amount.toFixed(2)}</td>
                               <td data-label="Crypto">{w.crypto}</td>
-                              <td data-label="Wallet" style={{ fontSize: '0.75rem', fontFamily: 'monospace', maxWidth: '160px', overflow: 'hidden', textOverflow: 'ellipsis' }}>{w.wallet_address}</td>
+                              <td data-label="Wallet" style={{ fontSize: '0.75rem', fontFamily: 'monospace', maxWidth: '220px', overflowWrap: 'anywhere' }}>{w.wallet_address}</td>
                               <td data-label="Status">{statusBadge(w.status)}</td>
                               <td data-label="Date" style={{ fontSize: '0.8rem', color: 'var(--text-faint)' }}>{formatDate(w.created_at)}</td>
                               <td data-label="Actions">
@@ -528,7 +528,7 @@ export default function AdminPanel() {
                               <input
                                 type="number" min="0" step="0.01"
                                 className="form-input"
-                                style={{ width: '100px', padding: '4px 8px', fontSize: '0.82rem' }}
+                                style={{ width: '100px', minWidth: 0, flex: '1 1 80px', padding: '4px 8px', fontSize: '0.82rem' }}
                                 value={balanceEdit.value}
                                 onChange={e => setBalanceEdit({ userId: u.id, value: e.target.value })}
                                 autoFocus
